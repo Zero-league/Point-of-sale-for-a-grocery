@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pos.Models
+namespace POS.Models
 {
     public class Class1
     {
