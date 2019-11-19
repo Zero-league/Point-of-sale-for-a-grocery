@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PointOfSalesForAGrocery", "PointOfSalesForAGrocery\PointOfSalesForAGrocery.csproj", "{3B8510CE-82F2-47B0-A642-9A85191225D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pos.Models", "Pos.Models\Pos.Models.csproj", "{6CC5A597-9F9E-402F-8FFC-F609FDBC15AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POS.Models", "Pos.Models\Pos.Models.csproj", "{6CC5A597-9F9E-402F-8FFC-F609FDBC15AF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POS.DataSource", "POS.DataSource\POS.DataSource.csproj", "{A29ADFEA-1055-457A-A73D-0EF2490EFE53}"
 EndProject
