@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 
 namespace PointOfSalesForAGrocery.Repository
 {
-    public class InventoryRepo :IInventoryRepository
+    interface IItemLocationRepository
     {
-
     }
 }
