@@ -15,5 +15,8 @@ namespace POS.Models
         [Required]
         public string ExpenseName { get; set; }
 
+        [ForeignKey("ExpId")]
+        public Expenses expenses { get; set; }
+        public int ExpId { get; set; }
     }
 }
