@@ -330,3 +330,5 @@ ASALocalRun/
 .mfractor/
 #Ignore Migration files
 PointOfSalesForAGrocery/Migrations/
+#Ignore Migration files
+POS.DataSource/Migrations/
