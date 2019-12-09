@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using PointOfSalesForAGrocery.Repository;
 using POS.DataSource;
 using POS.Models;
-using POS.Models.Entities;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
@@ -29,16 +28,14 @@ namespace PointOfSalesForAGrocery.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Inventory>>> GetInventories()
         {
-            var GetInventories = await _inventoryRepository.GetInventories();
-
-            return Ok(GetInventories);
+            return await _context.Inventories.ToListAsync();
         }
 
         // GET: api/Inventories/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Inventory>> GetInventory(int id)
         {
-            var inventory = await _inventoryRepository.GetInventory(id);
+            var inventory = await _context.Inventories.FindAsync(id);
 
             if (inventory == null)
             {
@@ -52,16 +49,18 @@ namespace PointOfSalesForAGrocery.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInventory(int id, [FromBody] InventoryDto inventoryDto)
+        public async Task<IActionResult> PutInventory(int id, Inventory inventory)
         {
-            if (inventoryDto == null)
+            if (id != inventory.Id)
             {
                 return BadRequest();
             }
 
+            _context.Entry(inventory).State = EntityState.Modified;
+
             try
             {
-                await _inventoryRepository.UpdateInventory(id, inventoryDto);
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -82,26 +81,26 @@ namespace PointOfSalesForAGrocery.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Inventory>> PostInventory([FromBody] InventoryDto inventoryDto)
+        public async Task<ActionResult<Inventory>> PostInventory(Inventory inventory)
         {
-            
-          var post=  await _inventoryRepository.PostInventory(inventoryDto);
+            _context.Inventories.Add(inventory);
+            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetInventory", new { id = post.Id }, post);
+            return CreatedAtAction("GetInventory", new { id = inventory.Id }, inventory);
         }
 
         // DELETE: api/Inventories/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Inventory>> DeleteInventory(int id)
         {
-            var inventory = await _inventoryRepository.GetInventory(id);
+            var inventory = await _context.Inventories.FindAsync(id);
             if (inventory == null)
             {
                 return NotFound();
             }
 
-
-            await _inventoryRepository.RemoveInventory(id);
+            _context.Inventories.Remove(inventory);
+            await _context.SaveChangesAsync();
 
             return inventory;
         }

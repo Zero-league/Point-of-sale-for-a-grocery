@@ -1,6 +1,4 @@
 ﻿using POS.DataSource;
-using POS.Models;
-using POS.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,31 +13,6 @@ namespace PointOfSalesForAGrocery.Repository.Implimentation
         public ItemCatogaryRepo(AppDbContext context)
         {
             this.context = context;
-        }
-
-        public Task<ItemCatogary> DeleteItemCatogary(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<ItemCatogary>> GetItemCatogaries()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ItemCatogary> GetItemCatogary(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ItemCatogary> PostItemCatogary(ItemCatogaryDto itemCatogaryDto)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ItemCatogary> UpdatetemCatogary(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }
