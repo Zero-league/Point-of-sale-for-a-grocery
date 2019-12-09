@@ -6,7 +6,7 @@ using System.Text;
 
 namespace POS.Models
 {
-    public class Sales
+    public class Sale
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
