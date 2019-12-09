@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PointOfSalesForAGrocery.Repository;
 using POS.DataSource;
 using POS.Models;
+using POS.Models.Entities;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
@@ -15,24 +17,28 @@ namespace PointOfSalesForAGrocery.Controllers
     public class ItemLocationsController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IItemLocationRepository _itemLocationRepository;
 
-        public ItemLocationsController(AppDbContext context)
+        public ItemLocationsController(AppDbContext context, IItemLocationRepository itemLocationRepository )
         {
             _context = context;
+            _itemLocationRepository = itemLocationRepository;
         }
 
         // GET: api/ItemLocations
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItemLocation>>> GetItemLocations()
         {
-            return await _context.ItemLocations.ToListAsync();
+            var GetItemLocations = await _itemLocationRepository.GetItemLocations();
+
+            return Ok(GetItemLocations);
         }
 
         // GET: api/ItemLocations/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ItemLocation>> GetItemLocation(int id)
         {
-            var itemLocation = await _context.ItemLocations.FindAsync(id);
+            var itemLocation = await _itemLocationRepository.GetItemLocation(id);
 
             if (itemLocation == null)
             {
@@ -46,18 +52,18 @@ namespace PointOfSalesForAGrocery.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutItemLocation(int id, ItemLocation itemLocation)
+        public async Task<IActionResult> PutItemLocation(int id,[FromBody] ItemLocationDto itemLocation)
         {
-            if (id != itemLocation.Id)
+            if (itemLocation ==null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(itemLocation).State = EntityState.Modified;
+
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _itemLocationRepository.PutItemLocation(id);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,26 +84,26 @@ namespace PointOfSalesForAGrocery.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<ItemLocation>> PostItemLocation(ItemLocation itemLocation)
+        public async Task<ActionResult<ItemLocation>> PostItemLocation([FromBody] ItemLocationDto itemLocation)
         {
-            _context.ItemLocations.Add(itemLocation);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetItemLocation", new { id = itemLocation.Id }, itemLocation);
+          var post =  await _itemLocationRepository.PostItemLocation();
+
+            return CreatedAtAction("GetItemLocation", new { id = post.Id }, itemLocation);
         }
 
         // DELETE: api/ItemLocations/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<ItemLocation>> DeleteItemLocation(int id)
         {
-            var itemLocation = await _context.ItemLocations.FindAsync(id);
+            var itemLocation = await _itemLocationRepository.GetItemLocation(id);
             if (itemLocation == null)
             {
                 return NotFound();
             }
 
-            _context.ItemLocations.Remove(itemLocation);
-            await _context.SaveChangesAsync();
+
+            await _itemLocationRepository.DeleteItemLocation(id);
 
             return itemLocation;
         }
