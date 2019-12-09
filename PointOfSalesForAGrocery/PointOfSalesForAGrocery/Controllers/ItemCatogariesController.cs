@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PointOfSalesForAGrocery.Repository;
 using POS.DataSource;
 using POS.Models;
+using POS.Models.Entities;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
@@ -16,23 +18,27 @@ namespace PointOfSalesForAGrocery.Controllers
     {
         private readonly AppDbContext _context;
 
-        public ItemCatogariesController(AppDbContext context)
+        private readonly IItemCatogaryRepository _itemCatogaryRepository;
+        public ItemCatogariesController(AppDbContext context, IItemCatogaryRepository itemCatogaryRepository)
         {
             _context = context;
+            _itemCatogaryRepository = itemCatogaryRepository;
         }
 
         // GET: api/ItemCatogaries
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItemCatogary>>> GetItemCatogaries()
         {
-            return await _context.ItemCatogaries.ToListAsync();
+            var ItemCatogaries =  await _itemCatogaryRepository.GetItemCatogaries();
+
+            return Ok(ItemCatogaries);
         }
 
         // GET: api/ItemCatogaries/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ItemCatogary>> GetItemCatogary(int id)
         {
-            var itemCatogary = await _context.ItemCatogaries.FindAsync(id);
+            var itemCatogary = await _itemCatogaryRepository.GetItemCatogary(id);
 
             if (itemCatogary == null)
             {
@@ -46,18 +52,18 @@ namespace PointOfSalesForAGrocery.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutItemCatogary(int id, ItemCatogary itemCatogary)
+        public async Task<IActionResult> PutItemCatogary(int id, [FromBody] ItemCatogaryDto itemCatogaryDto)
         {
-            if (id != itemCatogary.Id)
+            if (itemCatogaryDto == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(itemCatogary).State = EntityState.Modified;
+            
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _itemCatogaryRepository.UpdatetemCatogary(id);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,28 +84,27 @@ namespace PointOfSalesForAGrocery.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<ItemCatogary>> PostItemCatogary(ItemCatogary itemCatogary)
+        public async Task<ActionResult<ItemCatogary>> PostItemCatogary([FromBody] ItemCatogaryDto itemCatogaryDto)
         {
-            _context.ItemCatogaries.Add(itemCatogary);
-            await _context.SaveChangesAsync();
+          var post =  await _itemCatogaryRepository.PostItemCatogary(itemCatogaryDto);
 
-            return CreatedAtAction("GetItemCatogary", new { id = itemCatogary.Id }, itemCatogary);
+            return CreatedAtAction("GetItemCatogary", new { id = post.Id }, post);
         }
 
         // DELETE: api/ItemCatogaries/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<ItemCatogary>> DeleteItemCatogary(int id)
         {
-            var itemCatogary = await _context.ItemCatogaries.FindAsync(id);
+            var itemCatogary = await _itemCatogaryRepository.GetItemCatogary(id);
             if (itemCatogary == null)
             {
                 return NotFound();
             }
 
-            _context.ItemCatogaries.Remove(itemCatogary);
-            await _context.SaveChangesAsync();
+            var delete = await _itemCatogaryRepository.DeleteItemCatogary(id);
 
-            return itemCatogary;
+
+            return delete;
         }
 
         private bool ItemCatogaryExists(int id)

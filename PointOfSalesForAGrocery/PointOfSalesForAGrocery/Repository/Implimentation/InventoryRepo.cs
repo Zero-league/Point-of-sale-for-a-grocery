@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using POS.DataSource;
 using POS.Models;
+using POS.Models.Entities;
 
 namespace PointOfSalesForAGrocery.Repository
 {
@@ -16,7 +17,28 @@ namespace PointOfSalesForAGrocery.Repository
         {
             this.context = context;
         }
-        public Task<ActionResult<IEnumerable<Inventory>>> GetItemCatogaries()
+
+        public Task<IEnumerable<Inventory>> GetInventories()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Inventory> GetInventory(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Inventory> PostInventory(InventoryDto inventoryDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Inventory> RemoveInventory(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Inventory> UpdateInventory(int id, InventoryDto inventoryDto)
         {
             throw new NotImplementedException();
         }
