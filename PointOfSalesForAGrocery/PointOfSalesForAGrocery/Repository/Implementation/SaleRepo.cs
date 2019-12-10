@@ -1,4 +1,5 @@
-﻿using POS.DataSource;
+﻿using Microsoft.EntityFrameworkCore;
+using POS.DataSource;
 using POS.Models;
 using System;
 using System.Collections.Generic;
@@ -24,14 +25,16 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             throw new NotImplementedException();
         }
 
-        public Task<Sale> GetSaleById(int id)
+        public async Task<Sale> GetSaleById(int id)
         {
-            throw new NotImplementedException();
+            var sale = await _DbContext.Sale.Where(c => c.Id == id).SingleOrDefaultAsync();
+            return sale;
         }
 
-        public Task<IEnumerable<Sale>> GetSales()
+        public async Task<IEnumerable<Sale>> GetSales()
         {
-            throw new NotImplementedException();
+            var sales = await _DbContext.Sale.ToListAsync();
+            return sales;
         }
 
         public Task<Sale> UpdateSale(int id, Sale sale)

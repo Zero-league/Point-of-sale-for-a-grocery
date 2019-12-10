@@ -1,4 +1,5 @@
-﻿using POS.DataSource;
+﻿using Microsoft.EntityFrameworkCore;
+using POS.DataSource;
 using POS.Models;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,9 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             this._DbContext = DbContext;
         }
 
-        public Task<Bill> AddBill(Bill bill)
+        public async Task<Bill> AddBill(Bill bill)
         {
-            throw new NotImplementedException();
+            return _DbContext.AddAsync();
         }
 
         public Task<Bill> DeleteBill(int id)
@@ -25,14 +26,16 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             throw new NotImplementedException();
         }
 
-        public Task<Bill> GetBillById(int id)
+        public async Task<Bill> GetBillById(int id)
         {
-            throw new NotImplementedException();
+            var bill = await _DbContext.Bill.Where(c => c.Id == id).SingleOrDefaultAsync();
+            return bill;
         }
 
-        public Task<IEnumerable<Bill>> GetBills()
+        public async Task<IEnumerable<Bill>> GetBills()
         {
-            throw new NotImplementedException();
+            var bills = await _DbContext.Bill.ToListAsync();
+            return bills;
         }
 
         public Task<Bill> UpdateBill(int id, Bill bill)
