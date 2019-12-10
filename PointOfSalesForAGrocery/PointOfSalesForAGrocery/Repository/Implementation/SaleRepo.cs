@@ -15,14 +15,20 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
         {
             this._DbContext = DbContext;
         }
-        public Task<Sale> AddSale(Sale sale)
+        public async Task<Sale> AddSale(Sale sale)
         {
-            throw new NotImplementedException();
+            await _DbContext.Sale.AddAsync(sale);
+            await _DbContext.SaveChangesAsync();
+            var newsale = await GetSaleById(sale.Id);
+            return newsale;
         }
 
-        public Task<Sale> DeleteSale(int id)
+        public async Task<Sale> DeleteSale(int id)
         {
-            throw new NotImplementedException();
+            var removedsale = await GetSaleById(id);
+            _DbContext.Sale.Remove(removedsale);
+            await _DbContext.SaveChangesAsync();
+            return removedsale;
         }
 
         public async Task<Sale> GetSaleById(int id)
@@ -37,9 +43,32 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             return sales;
         }
 
-        public Task<Sale> UpdateSale(int id, Sale sale)
+        public async Task<Sale> UpdateSale(int id, Sale modifiedsale)
         {
-            throw new NotImplementedException();
+            var sale = await GetSaleById(id);
+            if(sale != null)
+            {
+                try
+                {
+                    sale.ItemsName = modifiedsale.ItemsName;
+                    sale.Quantity = modifiedsale.Quantity;
+                    sale.RetailPrice = modifiedsale.RetailPrice;
+                    sale.SalesPerson = modifiedsale.SalesPerson;
+                    sale.BillId = modifiedsale.BillId;
+
+                    await _DbContext.SaveChangesAsync();
+
+                    return sale;
+                }
+                catch(Exception)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

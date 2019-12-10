@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\POS.DataSource\POS.DataSource.csproj" />
+    <ProjectReference Include="..\POS.Models\POS.Models.csproj" />
   </ItemGroup>
 
 </Project>

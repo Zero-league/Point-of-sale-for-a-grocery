@@ -16,14 +16,20 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             this._DbContext = DbContext;
         }
 
-        public Task<Bill> AddBill(Bill bill)
+        public async Task<Bill> AddBill(Bill bill)
         {
-            throw new NotImplementedException();
+            await _DbContext.Bill.AddAsync(bill);
+            await _DbContext.SaveChangesAsync();
+            var newbill = await GetBillById(bill.Id);
+            return newbill;
         }
 
-        public Task<Bill> DeleteBill(int id)
+        public async Task<Bill> DeleteBill(int id)
         {
-            throw new NotImplementedException();
+            var removedbill = await GetBillById(id);
+            _DbContext.Bill.Remove(removedbill);
+            await _DbContext.SaveChangesAsync();
+            return removedbill;
         }
 
         public async Task<Bill> GetBillById(int id)
@@ -38,9 +44,31 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             return bills;
         }
 
-        public Task<Bill> UpdateBill(int id, Bill bill)
+        public async Task<Bill> UpdateBill(int id, Bill modifiedbill)
         {
-            throw new NotImplementedException();
+            var bill = await GetBillById(id);
+            if(bill != null)
+            {
+                try
+                {
+                    bill.DateTime = modifiedbill.DateTime;
+                    bill.Amount = modifiedbill.Amount;
+                    bill.Discount = modifiedbill.Discount;
+                    bill.SalesPerson = modifiedbill.SalesPerson;
+
+                    await _DbContext.SaveChangesAsync();
+
+                    return bill;
+                }
+                catch(Exception)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
