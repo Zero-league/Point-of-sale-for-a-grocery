@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PointOfSalesForAGrocery.Repository.Implimentation
+namespace PointOfSalesForAGrocery.Repository.Implementation
 {
     public class ItemCatogaryRepo : IItemCatogaryRepository
     {
@@ -37,7 +37,7 @@ namespace PointOfSalesForAGrocery.Repository.Implimentation
             throw new NotImplementedException();
         }
 
-        public Task<ItemCatogary> UpdatetemCatogary(int id)
+        public Task<ItemCatogary> UpdatetemCatogary(int id, ItemCatogaryDto itemCatogaryDto)
         {
             throw new NotImplementedException();
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,24 +13,26 @@ using POS.Models.Entities;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class InventoriesController : ControllerBase
     {
         private readonly AppDbContext _context;
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly IMapper mapper;
 
-        public InventoriesController(AppDbContext context,IInventoryRepository inventoryRepository)
+        public InventoriesController(AppDbContext context, IInventoryRepository inventoryRepository, IMapper mapper)
         {
             _context = context;
             this._inventoryRepository = inventoryRepository;
+            this.mapper = mapper;
         }
 
         // GET: api/Inventories
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Inventory>>> GetInventories()
-        {
-            var GetInventories = await _inventoryRepository.GetInventories();
+        [HttpGet("Inventories")]
+        public IActionResult GetInventories()
+        { 
+            var GetInventories =   _context.Inventories.ToList();
 
             return Ok(GetInventories);
         }
@@ -45,23 +48,27 @@ namespace PointOfSalesForAGrocery.Controllers
                 return NotFound();
             }
 
-            return inventory;
+            return Ok(inventory);
         }
 
         // PUT: api/Inventories/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
+        [HttpPut("Put/{id}")]
         public async Task<IActionResult> PutInventory(int id, [FromBody] InventoryDto inventoryDto)
         {
             if (inventoryDto == null)
             {
                 return BadRequest();
             }
-
+            
             try
             {
-                await _inventoryRepository.UpdateInventory(id, inventoryDto);
+               var update = await _inventoryRepository.UpdateInventory(id, inventoryDto);
+                if (update != null)
+                {
+                    return Ok();
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -81,17 +88,29 @@ namespace PointOfSalesForAGrocery.Controllers
         // POST: api/Inventories
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<Inventory>> PostInventory([FromBody] InventoryDto inventoryDto)
+        [HttpPost("post")]
+        public async Task<ActionResult<Inventory>> PostInventory([FromBody] InventoryDto c)
         {
-            
-          var post=  await _inventoryRepository.PostInventory(inventoryDto);
+           
+            var finalitem = mapper.Map<Inventory>(c);
+            var post = await _inventoryRepository.PostInventory(finalitem);
 
-            return CreatedAtAction("GetInventory", new { id = post.Id }, post);
+            if (post != null)
+            {
+                return CreatedAtAction("GetInventory", new { id = post.Id }, post);
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+            
+
+            
         }
 
         // DELETE: api/Inventories/5
-        [HttpDelete("{id}")]
+        [HttpDelete("Delet/{id}")]
         public async Task<ActionResult<Inventory>> DeleteInventory(int id)
         {
             var inventory = await _inventoryRepository.GetInventory(id);

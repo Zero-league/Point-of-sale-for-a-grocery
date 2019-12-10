@@ -12,8 +12,7 @@ namespace POS.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string ItemName { get; set; }
-        [DataType(DataType.Date)]
-        public DateTime ExpireDate { get; set; }
+        public string ExpireDate { get; set; }
         public int QTY { get; set; }
         public string Brand { get; set; }
         public int ItemCost { get; set; }

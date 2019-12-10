@@ -11,7 +11,7 @@ namespace PointOfSalesForAGrocery.Repository
     {
         Task<IEnumerable<ItemCatogary>> GetItemCatogaries();
         Task<ItemCatogary> GetItemCatogary(int id);
-        Task<ItemCatogary> UpdatetemCatogary(int id);
+        Task<ItemCatogary> UpdatetemCatogary(int id, ItemCatogaryDto itemCatogaryDto);
         Task<ItemCatogary> PostItemCatogary(ItemCatogaryDto itemCatogaryDto);
         Task<ItemCatogary> DeleteItemCatogary(int id);
     }

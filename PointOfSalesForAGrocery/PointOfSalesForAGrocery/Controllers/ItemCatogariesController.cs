@@ -63,7 +63,7 @@ namespace PointOfSalesForAGrocery.Controllers
 
             try
             {
-                await _itemCatogaryRepository.UpdatetemCatogary(id);
+                await _itemCatogaryRepository.UpdatetemCatogary(id, itemCatogaryDto);
             }
             catch (DbUpdateConcurrencyException)
             {

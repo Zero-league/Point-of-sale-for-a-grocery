@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PointOfSalesForAGrocery.Repository;
 using POS.DataSource;
 using POS.Models;
+using POS.Models.Entities;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
@@ -15,24 +17,27 @@ namespace PointOfSalesForAGrocery.Controllers
     public class UnitmesurementsController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IUnitMesurementRepositorys unitMesurementRepository;
 
-        public UnitmesurementsController(AppDbContext context)
+        public UnitmesurementsController(AppDbContext context, IUnitMesurementRepositorys unitMesurementRepository )
         {
             _context = context;
+            this.unitMesurementRepository = unitMesurementRepository;
         }
 
         // GET: api/Unitmesurements
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Unitmesurement>>> GetUnitmesurements()
         {
-            return await _context.Unitmesurements.ToListAsync();
+           var get =  await unitMesurementRepository.GetUnitmesurements();
+            return Ok(get);
         }
 
         // GET: api/Unitmesurements/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Unitmesurement>> GetUnitmesurement(int id)
         {
-            var unitmesurement = await _context.Unitmesurements.FindAsync(id);
+            var unitmesurement = await unitMesurementRepository.GetUnitmesurement(id);
 
             if (unitmesurement == null)
             {
@@ -46,18 +51,18 @@ namespace PointOfSalesForAGrocery.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUnitmesurement(int id, Unitmesurement unitmesurement)
+        public async Task<IActionResult> PutUnitmesurement(int id, [FromBody] UnitmesurementDto unitmesurementDto)
         {
-            if (id != unitmesurement.Id)
+            if (unitmesurementDto == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(unitmesurement).State = EntityState.Modified;
+            
 
             try
             {
-                await _context.SaveChangesAsync();
+                await unitMesurementRepository.PutUnitmesurement(id);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,26 +83,24 @@ namespace PointOfSalesForAGrocery.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Unitmesurement>> PostUnitmesurement(Unitmesurement unitmesurement)
+        public async Task<ActionResult<Unitmesurement>> PostUnitmesurement([FromBody] UnitmesurementDto unitmesurementDto)
         {
-            _context.Unitmesurements.Add(unitmesurement);
-            await _context.SaveChangesAsync();
+           
+          var post =  await unitMesurementRepository.PostUnitmesurement(unitmesurementDto);
 
-            return CreatedAtAction("GetUnitmesurement", new { id = unitmesurement.Id }, unitmesurement);
+            return CreatedAtAction("GetUnitmesurement", new { id = post.Id }, unitmesurementDto);
         }
 
         // DELETE: api/Unitmesurements/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Unitmesurement>> DeleteUnitmesurement(int id)
         {
-            var unitmesurement = await _context.Unitmesurements.FindAsync(id);
+            var unitmesurement = await unitMesurementRepository.GetUnitmesurement(id);
             if (unitmesurement == null)
             {
                 return NotFound();
             }
-
-            _context.Unitmesurements.Remove(unitmesurement);
-            await _context.SaveChangesAsync();
+            await unitMesurementRepository.DeleteUnitmesurement(id);
 
             return unitmesurement;
         }

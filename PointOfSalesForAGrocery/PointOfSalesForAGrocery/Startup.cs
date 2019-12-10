@@ -12,6 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using POS.DataSource;
+using AutoMapper;
+using PointOfSalesForAGrocery.Repository;
+using POS.Models;
 
 namespace PointOfSalesForAGrocery
 {
@@ -28,8 +31,12 @@ namespace PointOfSalesForAGrocery
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer("Data Source=.\\MSSQL;Initial Catalog=POSSYSTEM;Integrated Security=True"));
-            
+            string constring = Configuration["ConnectionString:Constring"];
+            services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer("Data Source=.\\MSSQL;Database=POSSYSTEM;Trusted_Connection=True"));
+
+            services.AddScoped<IInventoryRepository, InventoryRepo>();
+
+            services.AddAutoMapper(typeof(AuttoMapping));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,8 +46,12 @@ namespace PointOfSalesForAGrocery
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            
 
             app.UseHttpsRedirection();
+
+            
 
             app.UseRouting();
 
