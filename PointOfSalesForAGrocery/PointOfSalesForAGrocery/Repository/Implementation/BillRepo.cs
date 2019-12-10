@@ -16,9 +16,9 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             this._DbContext = DbContext;
         }
 
-        public async Task<Bill> AddBill(Bill bill)
+        public Task<Bill> AddBill(Bill bill)
         {
-            return _DbContext.AddAsync();
+            throw new NotImplementedException();
         }
 
         public Task<Bill> DeleteBill(int id)
