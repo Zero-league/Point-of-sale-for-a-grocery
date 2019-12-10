@@ -10,7 +10,7 @@ namespace POS.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int BillId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public DateTime DateTime { get; set; }

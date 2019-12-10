@@ -10,7 +10,7 @@ namespace POS.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ItemsId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string ItemsName { get; set; }
