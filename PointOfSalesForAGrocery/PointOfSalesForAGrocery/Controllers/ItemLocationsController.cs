@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,11 +19,13 @@ namespace PointOfSalesForAGrocery.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IItemLocationRepository _itemLocationRepository;
+        private readonly IMapper mapper;
 
-        public ItemLocationsController(AppDbContext context, IItemLocationRepository itemLocationRepository )
+        public ItemLocationsController(AppDbContext context, IItemLocationRepository itemLocationRepository, IMapper mapper )
         {
             _context = context;
             _itemLocationRepository = itemLocationRepository;
+            this.mapper = mapper;
         }
 
         // GET: api/ItemLocations
@@ -63,7 +66,15 @@ namespace PointOfSalesForAGrocery.Controllers
 
             try
             {
-                await _itemLocationRepository.PutItemLocation(id);
+               var item = await _itemLocationRepository.PutItemLocation(id, itemLocation);
+                if (item == null)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    return Ok(item);
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -77,7 +88,6 @@ namespace PointOfSalesForAGrocery.Controllers
                 }
             }
 
-            return NoContent();
         }
 
         // POST: api/ItemLocations
@@ -86,8 +96,8 @@ namespace PointOfSalesForAGrocery.Controllers
         [HttpPost]
         public async Task<ActionResult<ItemLocation>> PostItemLocation([FromBody] ItemLocationDto itemLocation)
         {
-
-          var post =  await _itemLocationRepository.PostItemLocation();
+            var map = mapper.Map<ItemLocation>(itemLocation);
+          var post =  await _itemLocationRepository.PostItemLocation(map);
 
             return CreatedAtAction("GetItemLocation", new { id = post.Id }, itemLocation);
         }

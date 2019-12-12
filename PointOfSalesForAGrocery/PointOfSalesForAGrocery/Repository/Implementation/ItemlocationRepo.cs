@@ -1,5 +1,8 @@
-﻿using POS.DataSource;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using POS.DataSource;
 using POS.Models;
+using POS.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,35 +13,65 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
     public class ItemlocationRepo : IItemLocationRepository
     {
         private readonly AppDbContext context;
+        private readonly IMapper mapper;
 
-        public ItemlocationRepo(AppDbContext context)
+        public ItemlocationRepo(AppDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
-        public Task<ItemLocation> DeleteItemLocation(int id)
+        public async Task<ItemLocation> DeleteItemLocation(int id)
         {
-            throw new NotImplementedException();
+            var itemLocation = await GetItemLocation(id);
+           
+                 context.ItemLocations.Remove(itemLocation);
+                var item = await GetItemLocation(id);
+                if (item  == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return item;
+                }
+            
         }
 
-        public Task<ItemLocation> GetItemLocation(int id)
+        public async Task<ItemLocation> GetItemLocation(int id)
         {
-            throw new NotImplementedException();
+            var location = await context.ItemLocations.Where(i => i.Id == id).SingleOrDefaultAsync();
+            return location;
         }
 
-        public Task<IEnumerable<ItemLocation>> GetItemLocations()
+        public async Task<IEnumerable<ItemLocation>> GetItemLocations()
         {
-            throw new NotImplementedException();
+            var locations = await context.ItemLocations.ToListAsync() ;
+            return locations;
         }
 
-        public Task<ItemLocation> PostItemLocation()
+        public async Task<ItemLocation> PostItemLocation(ItemLocation itemLocation)
         {
-            throw new NotImplementedException();
+           await context.ItemLocations.AddAsync(itemLocation);
+           await context.SaveChangesAsync();
+           return itemLocation;
         }
 
-        public Task<ItemLocation> PutItemLocation(int id)
+        public async Task<ItemLocation> PutItemLocation(int id, ItemLocationDto itemLocation)
         {
-            throw new NotImplementedException();
+            var item =await context.ItemLocations.Where(i => i.Id == id).SingleOrDefaultAsync();
+            if (item == null)
+            {
+                return null;
+            }
+            else
+            {
+                var map = mapper.Map(itemLocation, item);
+                context.ItemLocations.Update(map);
+                return map;
+            }
+           
+
         }
     }
 }

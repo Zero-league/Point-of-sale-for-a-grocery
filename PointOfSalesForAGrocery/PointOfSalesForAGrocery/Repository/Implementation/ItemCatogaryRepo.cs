@@ -27,11 +27,11 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             context.ItemCatogaries.Remove(itemCatogary);
             if (itemCatogary == null)
             {
-                return itemCatogary;
+                return null;
             }
             else
             {
-                return null;
+                return itemCatogary;
             }
             
         }

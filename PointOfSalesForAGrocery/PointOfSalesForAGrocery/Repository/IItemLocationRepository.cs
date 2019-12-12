@@ -10,8 +10,8 @@ namespace PointOfSalesForAGrocery.Repository
     {
         Task<IEnumerable<ItemLocation>> GetItemLocations();
         Task<ItemLocation> GetItemLocation(int id);
-        Task<ItemLocation> PutItemLocation(int id);
-        Task<ItemLocation> PostItemLocation();
+        Task<ItemLocation> PutItemLocation(int id, ItemLocationDto itemLocation);
+        Task<ItemLocation> PostItemLocation(ItemLocation itemLocation);
         Task<ItemLocation> DeleteItemLocation(int id);
     }
 }
