@@ -11,6 +11,7 @@ namespace POS.Models
         public int Id { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime DateTime { get; set; }
         public int Discount { get; set; }
 

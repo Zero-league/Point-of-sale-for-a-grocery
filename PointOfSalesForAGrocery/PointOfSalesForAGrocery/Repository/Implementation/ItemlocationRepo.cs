@@ -26,7 +26,8 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             var itemLocation = await GetItemLocation(id);
            
                  context.ItemLocations.Remove(itemLocation);
-                var item = await GetItemLocation(id);
+            await context.SaveChangesAsync();
+            var item = await GetItemLocation(id);
                 if (item  == null)
                 {
                     return null;
@@ -68,6 +69,7 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             {
                 var map = mapper.Map(itemLocation, item);
                 context.ItemLocations.Update(map);
+                await context.SaveChangesAsync();
                 return map;
             }
            

@@ -25,6 +25,7 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
         {
             var itemCatogary = await GetItemCatogary(id);
             context.ItemCatogaries.Remove(itemCatogary);
+            await context.SaveChangesAsync();
             if (itemCatogary == null)
             {
                 return null;

@@ -25,6 +25,7 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
         {
             var item = await GetUnitmesurement(id);
             context.Unitmesurements.Remove(item);
+            await context.SaveChangesAsync();
             if (item == null)
             {
                 return null;

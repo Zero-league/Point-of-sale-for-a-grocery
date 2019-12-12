@@ -65,6 +65,7 @@ namespace PointOfSalesForAGrocery.Controllers
 
             
                var item =  await _itemCatogaryRepository.UpdatetemCatogary(id, itemCatogaryDto);
+            
 
                 if (item == null)
                 {

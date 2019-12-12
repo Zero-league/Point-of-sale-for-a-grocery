@@ -52,6 +52,7 @@ namespace PointOfSalesForAGrocery.Repository
             else
             {
                 context.Inventories.Remove(inventory);
+                await context.SaveChangesAsync();
                 return inventory;
             }
         }
