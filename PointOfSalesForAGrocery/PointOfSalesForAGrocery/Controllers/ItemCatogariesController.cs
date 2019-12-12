@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,10 +20,13 @@ namespace PointOfSalesForAGrocery.Controllers
         private readonly AppDbContext _context;
 
         private readonly IItemCatogaryRepository _itemCatogaryRepository;
-        public ItemCatogariesController(AppDbContext context, IItemCatogaryRepository itemCatogaryRepository)
+        private readonly IMapper mapper;
+
+        public ItemCatogariesController(AppDbContext context, IItemCatogaryRepository itemCatogaryRepository, IMapper mapper)
         {
             _context = context;
             _itemCatogaryRepository = itemCatogaryRepository;
+            this.mapper = mapper;
         }
 
         // GET: api/ItemCatogaries
@@ -60,24 +64,19 @@ namespace PointOfSalesForAGrocery.Controllers
             }
 
             
+               var item =  await _itemCatogaryRepository.UpdatetemCatogary(id, itemCatogaryDto);
 
-            try
-            {
-                await _itemCatogaryRepository.UpdatetemCatogary(id, itemCatogaryDto);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ItemCatogaryExists(id))
+                if (item == null)
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
                 else
                 {
-                    throw;
+                    return Ok(item);
                 }
-            }
+           
 
-            return NoContent();
+           
         }
 
         // POST: api/ItemCatogaries
@@ -86,7 +85,8 @@ namespace PointOfSalesForAGrocery.Controllers
         [HttpPost]
         public async Task<ActionResult<ItemCatogary>> PostItemCatogary([FromBody] ItemCatogaryDto itemCatogaryDto)
         {
-          var post =  await _itemCatogaryRepository.PostItemCatogary(itemCatogaryDto);
+            var map = mapper.Map<ItemCatogary>(itemCatogaryDto);   
+          var post =  await _itemCatogaryRepository.PostItemCatogary(map);
 
             return CreatedAtAction("GetItemCatogary", new { id = post.Id }, post);
         }
@@ -102,9 +102,15 @@ namespace PointOfSalesForAGrocery.Controllers
             }
 
             var delete = await _itemCatogaryRepository.DeleteItemCatogary(id);
+            if (delete  != null)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
 
-
-            return delete;
         }
 
         private bool ItemCatogaryExists(int id)

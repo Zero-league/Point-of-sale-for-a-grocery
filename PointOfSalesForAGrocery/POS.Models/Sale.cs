@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace POS.Models
 {
-    public class Sales
+    public class Sale
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ItemsId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string ItemsName { get; set; }
@@ -20,7 +17,7 @@ namespace POS.Models
 
         [Required]
         public int RetailPrice { get; set; }
-        
+
         public string SalesPerson { get; set; }
 
         [ForeignKey("BillId")]

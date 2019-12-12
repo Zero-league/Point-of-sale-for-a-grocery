@@ -113,16 +113,14 @@ namespace PointOfSalesForAGrocery.Controllers
         [HttpDelete("Delet/{id}")]
         public async Task<ActionResult<Inventory>> DeleteInventory(int id)
         {
-            var inventory = await _inventoryRepository.GetInventory(id);
-            if (inventory == null)
+
+           var delete =  await _inventoryRepository.RemoveInventory(id);
+            if (delete == null)
             {
-                return NotFound();
+                return BadRequest();
             }
-
-
-            await _inventoryRepository.RemoveInventory(id);
-
-            return inventory;
+            
+            return Ok();
         }
 
         private bool InventoryExists(int id)

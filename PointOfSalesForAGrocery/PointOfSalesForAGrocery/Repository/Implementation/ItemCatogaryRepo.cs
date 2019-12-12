@@ -1,4 +1,6 @@
-﻿using POS.DataSource;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using POS.DataSource;
 using POS.Models;
 using POS.Models.Entities;
 using System;
@@ -11,35 +13,68 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
     public class ItemCatogaryRepo : IItemCatogaryRepository
     {
         private readonly AppDbContext context;
+        private readonly IMapper mapper;
 
-        public ItemCatogaryRepo(AppDbContext context)
+        public ItemCatogaryRepo(AppDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
-        public Task<ItemCatogary> DeleteItemCatogary(int id)
+        public async Task<ItemCatogary> DeleteItemCatogary(int id)
         {
-            throw new NotImplementedException();
+            var itemCatogary = await GetItemCatogary(id);
+            context.ItemCatogaries.Remove(itemCatogary);
+            if (itemCatogary == null)
+            {
+                return itemCatogary;
+            }
+            else
+            {
+                return null;
+            }
+            
         }
 
-        public Task<IEnumerable<ItemCatogary>> GetItemCatogaries()
+        public async Task<IEnumerable<ItemCatogary>> GetItemCatogaries()
         {
-            throw new NotImplementedException();
+            var item = await context.ItemCatogaries.ToListAsync();
+            return item;
         }
 
-        public Task<ItemCatogary> GetItemCatogary(int id)
+        public async Task<ItemCatogary> GetItemCatogary(int id)
         {
-            throw new NotImplementedException();
+            var item = await context.ItemCatogaries.Where(i => i.Id == id).SingleOrDefaultAsync();
+
+            return item;
         }
 
-        public Task<ItemCatogary> PostItemCatogary(ItemCatogaryDto itemCatogaryDto)
+        public async Task<ItemCatogary> PostItemCatogary(ItemCatogary  itemCatogary)
         {
-            throw new NotImplementedException();
+            await context.ItemCatogaries.AddAsync(itemCatogary);
+            await context.SaveChangesAsync();
+            var post = await GetItemCatogary(itemCatogary.Id);
+            return post;
+
+
         }
 
-        public Task<ItemCatogary> UpdatetemCatogary(int id, ItemCatogaryDto itemCatogaryDto)
+        public async Task<ItemCatogary> UpdatetemCatogary(int id, ItemCatogaryDto itemCatogaryDto)
         {
-            throw new NotImplementedException();
+            var item = await context.ItemCatogaries.Where(i => i.Id == id).SingleOrDefaultAsync();
+
+            if (item == null)
+            {
+                return null;
+            }
+            else
+            {
+                var mp = mapper.Map(itemCatogaryDto, item);
+                await context.SaveChangesAsync();
+
+                return mp;
+
+            }
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace POS.Models.Entities
+﻿namespace POS.Models.Entities
 {
     public class InventoryDto
     {

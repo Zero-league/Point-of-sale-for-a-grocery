@@ -30,7 +30,7 @@ namespace PointOfSalesForAGrocery.Repository
 
         public async Task<Inventory> GetInventory(int id)
         {
-            var get = await context.Inventories.FindAsync(id);
+            var get = await context.Inventories.Where(g => g.Id == id).SingleOrDefaultAsync();
             return get;
         }
 
@@ -42,9 +42,18 @@ namespace PointOfSalesForAGrocery.Repository
             return post;
         }
 
-        public Task<Inventory> RemoveInventory(int id)
+        public async Task<Inventory> RemoveInventory(int id)
         {
-            throw new NotImplementedException();
+            var inventory = await GetInventory(id);
+            if (inventory == null)
+            {
+                return null;
+            }
+            else
+            {
+                context.Inventories.Remove(inventory);
+                return inventory;
+            }
         }
 
         public async Task<Inventory> UpdateInventory(int id, InventoryDto c)

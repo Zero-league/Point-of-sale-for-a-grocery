@@ -16,5 +16,7 @@ namespace POS.DataSource
         public DbSet<ItemCatogary>  ItemCatogaries { get; set; }
         public DbSet<ItemLocation>  ItemLocations { get; set; }
         public DbSet<Unitmesurement>  Unitmesurements { get; set; }
+        public DbSet<Bill> Bill { get; set; }
+        public DbSet<Sale> Sale { get; set; }
     }
 }
