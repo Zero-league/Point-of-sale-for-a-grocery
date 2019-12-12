@@ -10,8 +10,8 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
 {
     public class SaleRepo : ISaleRepository
     {
-        private readonly POSDbContext _DbContext;
-        public SaleRepo(POSDbContext DbContext)
+        private readonly AppDbContext _DbContext;
+        public SaleRepo(AppDbContext DbContext)
         {
             this._DbContext = DbContext;
         }

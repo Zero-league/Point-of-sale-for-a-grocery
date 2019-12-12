@@ -29,7 +29,7 @@ namespace PointOfSalesForAGrocery
         {
             services.AddControllers();
             string connectionString = Configuration["connectionString:POSDbConnectionString"];
-            services.AddDbContext<POSDbContext>(o => o.UseSqlServer(connectionString));
+            services.AddDbContext<AppDbContext>(o => o.UseSqlServer(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

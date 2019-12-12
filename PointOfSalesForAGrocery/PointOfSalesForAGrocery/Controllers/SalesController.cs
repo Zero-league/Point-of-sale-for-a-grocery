@@ -10,13 +10,13 @@ using POS.Models;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/sales")]
     [ApiController]
     public class SalesController : ControllerBase
     {
-        private readonly POSDbContext _context;
+        private readonly AppDbContext _context;
 
-        public SalesController(POSDbContext context)
+        public SalesController(AppDbContext context)
         {
             _context = context;
         }

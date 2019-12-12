@@ -9,7 +9,7 @@ using POS.DataSource;
 
 namespace POS.DataSource.Migrations
 {
-    [DbContext(typeof(POSDbContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20191209122956_BillSalesMigration2")]
     partial class BillSalesMigration2
     {

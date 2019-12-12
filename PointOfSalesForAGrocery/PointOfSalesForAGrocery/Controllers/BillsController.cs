@@ -10,13 +10,13 @@ using POS.Models;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/bills")]
     [ApiController]
     public class BillsController : ControllerBase
     {
-        private readonly POSDbContext _context;
+        private readonly AppDbContext _context;
 
-        public BillsController(POSDbContext context)
+        public BillsController(AppDbContext context)
         {
             _context = context;
         }
@@ -78,7 +78,7 @@ namespace PointOfSalesForAGrocery.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Bill>> AddBill(Bill bill)
+        public async Task<ActionResult<Bill>> AddBill([FromBody]Bill bill)
         {
             _context.Bill.Add(bill);
             await _context.SaveChangesAsync();

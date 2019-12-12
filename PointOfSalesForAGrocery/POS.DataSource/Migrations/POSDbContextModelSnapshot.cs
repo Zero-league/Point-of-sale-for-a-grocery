@@ -8,7 +8,7 @@ using POS.DataSource;
 
 namespace POS.DataSource.Migrations
 {
-    [DbContext(typeof(POSDbContext))]
+    [DbContext(typeof(AppDbContext))]
     partial class POSDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
