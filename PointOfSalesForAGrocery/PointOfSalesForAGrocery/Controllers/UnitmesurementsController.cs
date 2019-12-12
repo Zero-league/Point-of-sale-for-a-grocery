@@ -59,24 +59,17 @@ namespace PointOfSalesForAGrocery.Controllers
             }
 
             
-
-            try
+              var um =  await unitMesurementRepository.PutUnitmesurement(id, unitmesurementDto);
+            if (um == null)
             {
-                await unitMesurementRepository.PutUnitmesurement(id);
+                return BadRequest();
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!UnitmesurementExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return Ok(um);
             }
 
-            return NoContent();
+            
         }
 
         // POST: api/Unitmesurements
@@ -95,14 +88,17 @@ namespace PointOfSalesForAGrocery.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Unitmesurement>> DeleteUnitmesurement(int id)
         {
-            var unitmesurement = await unitMesurementRepository.GetUnitmesurement(id);
-            if (unitmesurement == null)
+            
+            
+           var item = await unitMesurementRepository.DeleteUnitmesurement(id);
+            if (item == null)
             {
-                return NotFound();
+                return Ok();
             }
-            await unitMesurementRepository.DeleteUnitmesurement(id);
-
-            return unitmesurement;
+            else
+            {
+                return BadRequest();
+            }
         }
 
         private bool UnitmesurementExists(int id)

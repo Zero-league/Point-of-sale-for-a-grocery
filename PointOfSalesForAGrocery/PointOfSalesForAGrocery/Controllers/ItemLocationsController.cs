@@ -106,16 +106,17 @@ namespace PointOfSalesForAGrocery.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ItemLocation>> DeleteItemLocation(int id)
         {
-            var itemLocation = await _itemLocationRepository.GetItemLocation(id);
-            if (itemLocation == null)
+           
+           var item = await _itemLocationRepository.DeleteItemLocation(id);
+
+            if (item == null)
             {
-                return NotFound();
+                return Ok();
             }
-
-
-            await _itemLocationRepository.DeleteItemLocation(id);
-
-            return itemLocation;
+            else
+            {
+                return BadRequest();
+            }
         }
 
         private bool ItemLocationExists(int id)

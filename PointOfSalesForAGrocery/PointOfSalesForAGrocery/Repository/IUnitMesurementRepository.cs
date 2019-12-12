@@ -12,7 +12,7 @@ namespace PointOfSalesForAGrocery.Repository
 
         Task<IEnumerable<Unitmesurement>> GetUnitmesurements();
         Task<Unitmesurement> GetUnitmesurement(int id);
-        Task<Unitmesurement> PutUnitmesurement(int id);
+        Task<Unitmesurement> PutUnitmesurement(int id, UnitmesurementDto unitmesurementDto);
         Task<Unitmesurement> PostUnitmesurement(UnitmesurementDto unitmesurementDto);
         Task<Unitmesurement> DeleteUnitmesurement(int id);
     }

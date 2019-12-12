@@ -1,4 +1,6 @@
-﻿using POS.DataSource;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using POS.DataSource;
 using POS.Models;
 using POS.Models.Entities;
 using System;
@@ -11,35 +13,66 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
     public class UnitMesurementRepo : IUnitMesurementRepositorys
     {
         private readonly AppDbContext context;
+        private readonly IMapper mapper;
 
-        public UnitMesurementRepo(AppDbContext context)
+        public UnitMesurementRepo(AppDbContext context,IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
-        public Task<Unitmesurement> DeleteUnitmesurement(int id)
+        public async Task<Unitmesurement> DeleteUnitmesurement(int id)
         {
-            throw new NotImplementedException();
+            var item = await GetUnitmesurement(id);
+            context.Unitmesurements.Remove(item);
+            if (item == null)
+            {
+                return null;
+            }
+            else
+            {
+                return item;
+            }
         }
 
-        public Task<Unitmesurement> GetUnitmesurement(int id)
+        public async Task<Unitmesurement> GetUnitmesurement(int id)
         {
-            throw new NotImplementedException();
+            var item = await context.Unitmesurements.Where(i => i.Id == id).SingleOrDefaultAsync();
+
+            return item;
         }
 
-        public Task<IEnumerable<Unitmesurement>> GetUnitmesurements()
+        public async Task<IEnumerable<Unitmesurement>> GetUnitmesurements()
         {
-            throw new NotImplementedException();
+            var item = await context.Unitmesurements.ToListAsync();
+            return item;
         }
 
-        public Task<Unitmesurement> PostUnitmesurement(UnitmesurementDto unitmesurementDto)
+        public async Task<Unitmesurement> PostUnitmesurement(UnitmesurementDto unitmesurementDto)
         {
-            throw new NotImplementedException();
+            var mp = mapper.Map<Unitmesurement>(unitmesurementDto);
+            await context.Unitmesurements.AddAsync(mp);
+            await context.SaveChangesAsync();
+            var post = await GetUnitmesurement(mp.Id);
+            return post;
         }
 
-        public Task<Unitmesurement> PutUnitmesurement(int id)
+        public async Task<Unitmesurement> PutUnitmesurement(int id, UnitmesurementDto unitmesurementDto)
         {
-            throw new NotImplementedException();
+            var item = await context.Unitmesurements.Where(i => i.Id == id).SingleOrDefaultAsync();
+
+            if (item == null)
+            {
+                return null;
+            }
+            else
+            {
+                var mp = mapper.Map(unitmesurementDto, item);
+                await context.SaveChangesAsync();
+
+                return mp;
+
+            }
         }
     }
 }
