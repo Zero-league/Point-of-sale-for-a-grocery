@@ -13,8 +13,8 @@ namespace POS.Models
         public int ExpId { get; set; }
 
         [ForeignKey("ExpeId")]
-        public ExpenseType expenseType { get; set; }
-        public int ExpeId { get; set; }
+        public string expenseType { get; set; }
+       
 
         [Required]
         [DataType(DataType.Date)]
