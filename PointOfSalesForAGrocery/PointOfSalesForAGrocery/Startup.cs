@@ -15,6 +15,7 @@ using POS.DataSource;
 using AutoMapper;
 using PointOfSalesForAGrocery.Repository;
 using POS.Models;
+using PointOfSalesForAGrocery.Repository.Implementation;
 
 namespace PointOfSalesForAGrocery
 {
@@ -32,16 +33,20 @@ namespace PointOfSalesForAGrocery
         {
             services.AddControllers();
             string constring = Configuration["ConnectionString:Constring"];
-            services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer("Data Source=.\\MSSQL;Database=POSSYSTEM;Trusted_Connection=True"));
+            services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(constring));
 
             services.AddScoped<IInventoryRepository, InventoryRepo>();
+            services.AddScoped<IExpensesRepository, ExpensesRepo>();
 
             services.AddAutoMapper(typeof(AuttoMapping));
+
+            //services.AddEntityFrameworkSqlServer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

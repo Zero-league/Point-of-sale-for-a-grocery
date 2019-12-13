@@ -166,6 +166,15 @@ namespace POS.DataSource.Migrations
                     b.ToTable("Unitmesurements");
                 });
 
+            modelBuilder.Entity("POS.Models.Expenses", b =>
+                {
+                    b.HasOne("POS.Models.ExpenseType", "expenseType")
+                        .WithMany()
+                        .HasForeignKey("ExpeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("POS.Models.Inventory", b =>
                 {
                     b.HasOne("POS.Models.ItemCatogary", "ItemCatogary")
