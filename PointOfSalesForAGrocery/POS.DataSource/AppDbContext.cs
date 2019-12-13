@@ -10,7 +10,7 @@ namespace POS.DataSource
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            Database.Migrate();
+            //Database.Migrate();
         }
 
         public DbSet<Inventory>  Inventories { get; set; }
@@ -18,7 +18,7 @@ namespace POS.DataSource
         public DbSet<ItemLocation>  ItemLocations { get; set; }
         public DbSet<Unitmesurement>  Unitmesurements { get; set; }
         public DbSet<Expenses> Expenses { get; set; }
-        public DbSet<ExpenseType> ExpenseTypes { get; set; }
+        //public DbSet<ExpenseType> ExpenseTypes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {

@@ -12,9 +12,12 @@ namespace POS.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ExpId { get; set; }
 
-        [ForeignKey("ExpeId")]
-        public ExpenseType expenseType { get; set; }
-        public int ExpeId { get; set; }
+        //[ForeignKey("ExpeId")]
+        //public ExpenseType expenseType { get; set; }
+        //public int ExpeId { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string Name { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
