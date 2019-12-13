@@ -6,17 +6,12 @@ using System.Text;
 
 namespace POS.Models
 {
-    public class ExpenseType
+    public class ItemCatogary
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public string CatogaryName { get; set; }
 
-        [Required]
-        public string ExpenseName { get; set; }
-
-        //[ForeignKey("ExpId")]
-        //public Expenses expenses { get; set; }
-        //public int ExpId { get; set; }
     }
 }

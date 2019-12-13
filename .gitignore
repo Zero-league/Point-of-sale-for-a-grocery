@@ -329,4 +329,12 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 #Ignore Migration files
-PointOfSalesForAGrocery/Migrations/
+PointOfSalesForAGrocery/Migrations
+#Ignore Migration files
+POS.DataSource/Migrations
+#Ignore Migration files
+PointOfSalesForAGrocery/POS.DataSource/Migrations
+#Ignore Startup files
+PointOfSalesForAGrocery/Startup.cs
+#Ignore appsettings files
+PointOfSalesForAGrocery/appsettings.json

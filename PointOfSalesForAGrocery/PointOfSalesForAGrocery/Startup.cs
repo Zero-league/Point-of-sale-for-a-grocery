@@ -6,10 +6,16 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using POS.DataSource;
+using AutoMapper;
+using PointOfSalesForAGrocery.Repository;
+using POS.Models;
+using PointOfSalesForAGrocery.Repository.Implementation;
 
 namespace PointOfSalesForAGrocery
 {
@@ -26,17 +32,31 @@ namespace PointOfSalesForAGrocery
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            string constring = Configuration["ConnectionString:Constring"];
+            services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(constring));
+
+            services.AddScoped<IInventoryRepository, InventoryRepo>();
+            services.AddScoped<IExpensesRepository, ExpensesRepo>();
+
+            services.AddAutoMapper(typeof(AuttoMapping));
+
+            //services.AddEntityFrameworkSqlServer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            
 
             app.UseHttpsRedirection();
+
+            
 
             app.UseRouting();
 
