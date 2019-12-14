@@ -43,6 +43,27 @@ namespace POS.DataSource.Migrations
                     b.ToTable("Bill");
                 });
 
+            modelBuilder.Entity("POS.Models.Expenses", b =>
+                {
+                    b.Property<int>("ExpId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Payment")
+                        .HasColumnType("float");
+
+                    b.Property<string>("expenseType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ExpId");
+
+                    b.ToTable("Expenses");
+                });
+
             modelBuilder.Entity("POS.Models.Inventory", b =>
                 {
                     b.Property<int>("Id")
@@ -164,15 +185,6 @@ namespace POS.DataSource.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Unitmesurements");
-                });
-
-            modelBuilder.Entity("POS.Models.Expenses", b =>
-                {
-                    b.HasOne("POS.Models.ExpenseType", "expenseType")
-                        .WithMany()
-                        .HasForeignKey("ExpeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("POS.Models.Inventory", b =>

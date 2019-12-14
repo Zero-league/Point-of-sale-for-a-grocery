@@ -18,16 +18,6 @@ namespace POS.DataSource
         public DbSet<ItemLocation>  ItemLocations { get; set; }
         public DbSet<Unitmesurement>  Unitmesurements { get; set; }
         public DbSet<Expenses> Expenses { get; set; }
-        public DbSet<ExpenseType> ExpenseTypes { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder builder)
-        {
-            //string sqlConnectionString = "Server=DESKTOP-ES9JH7P;Database=POSSYSTEM;Trusted_Connection=True";
-
-            //builder.UseSqlServer(sqlConnectionString);
-
-            base.OnConfiguring(builder);
-        }
         public DbSet<Bill> Bill { get; set; }
         public DbSet<Sale> Sale { get; set; }
     }
