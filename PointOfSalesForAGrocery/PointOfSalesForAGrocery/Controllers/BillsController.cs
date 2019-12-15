@@ -78,12 +78,46 @@ namespace PointOfSalesForAGrocery.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Bill>> AddBill(Bill bill)
+        public async Task<ActionResult<Bill>> AddBill([FromBody] Bill bill)
         {
-            _context.Bill.Add(bill);
-            await _context.SaveChangesAsync();
+            try
+            {
+                if (bill.Discount != 0)
+                {
+                    Bill bill1 = new Bill();
+                    bill1.Amount = bill.Amount * (bill.Discount / 100);
+                    bill1.DateTime = bill.DateTime;
+                    bill1.Discount = bill.Discount;
+                    bill1.SalesPerson = bill.SalesPerson;
 
-            return CreatedAtAction("GetBill", new { id = bill.Id }, bill);
+                    _context.Bill.Add(bill1);
+                    await _context.SaveChangesAsync();
+                    return Ok(bill1);
+                }
+                else
+                {
+                    Bill b = new Bill();
+                    b.Amount = bill.Amount;
+                    b.DateTime = bill.DateTime;
+                    b.Discount = bill.Discount;
+                    b.SalesPerson = bill.SalesPerson;
+
+                    _context.Bill.Add(bill);
+                    await _context.SaveChangesAsync();
+                    return Ok(b);
+                }
+
+                
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
+           
+
+
+            
         }
 
         // DELETE: api/Bills/5
