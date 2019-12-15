@@ -38,17 +38,17 @@ namespace PointOfSalesForAGrocery.Controllers
         }
 
         // GET: api/Inventories/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Inventory>> GetInventory(int id)
+        [HttpGet("Inventories/{id}")]
+        public async Task<ActionResult<ItemDto>> GetInventory(int id )
         {
-            var inventory = await _inventoryRepository.GetInventory(id);
+            var Item = await _inventoryRepository.GetInventory(id);
 
-            if (inventory == null)
+            if (Item == null)
             {
                 return NotFound();
             }
 
-            return Ok(inventory);
+            return Ok(Item);
         }
 
         // PUT: api/Inventories/5

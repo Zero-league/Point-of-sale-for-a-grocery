@@ -20,7 +20,7 @@ namespace PointOfSalesForAGrocery.Controllers
         [HttpGet("Report")]
         public List<Bill> GetReport(DateTime StartDate, DateTime EndDate)
         {
-            var report = (from m in Context.Bill.Where(d => d.DateTime <= StartDate && d.DateTime <= EndDate)
+            var report = (from m in Context.Bill.Where(d => d.DateTime >= StartDate && d.DateTime <= EndDate)
                          select m).ToList();
 
             return report;

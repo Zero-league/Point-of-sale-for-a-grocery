@@ -33,7 +33,7 @@ namespace PointOfSalesForAGrocery
         {
             services.AddControllers();
             string constring = Configuration["ConnectionString:Constring"];
-            services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer("Server=.\\MSSQL;Database=POSSYSTEM;Trusted_Connection=True"));
+            services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer("Data Source=.\\MSSQL;Initial Catalog=POSSYSTEM;Integrated Security=True"));
 
             
 

@@ -10,7 +10,7 @@ namespace POS.DataSource
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            Database.Migrate();
+            
         }
 
         public DbSet<Inventory>  Inventories { get; set; }
