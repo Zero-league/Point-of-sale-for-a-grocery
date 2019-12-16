@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PointOfSalesForAGrocery.Repository;
+using PointOfSalesForAGrocery.Repository.Implementation;
 using POS.DataSource;
 
 namespace PointOfSalesForAGrocery
@@ -28,8 +30,20 @@ namespace PointOfSalesForAGrocery
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            string connectionString = Configuration["connectionString:POSDbConnectionString"];
-            services.AddDbContext<AppDbContext>(o => o.UseSqlServer(connectionString));
+            //string connectionString = Configuration["connectionString:POSDbConnectionString"];
+            services.AddDbContext<AppDbContext>();
+
+            services.AddTransient<IBillRepository, BillRepo>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("MyAllowSpecificOrigins",
+                    builder =>
+                    builder.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin());
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +57,8 @@ namespace PointOfSalesForAGrocery
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("MyAllowSpecificOrigins");
 
             app.UseAuthorization();
 

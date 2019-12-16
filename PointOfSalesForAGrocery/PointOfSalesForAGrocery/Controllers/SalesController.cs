@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PointOfSalesForAGrocery.Repository;
 using POS.DataSource;
 using POS.Models;
 
@@ -15,96 +16,88 @@ namespace PointOfSalesForAGrocery.Controllers
     public class SalesController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly ISaleRepository _saleRepository;
 
-        public SalesController(AppDbContext context)
+        public SalesController(AppDbContext context, ISaleRepository saleRepository)
         {
             _context = context;
+            this._saleRepository = saleRepository;
         }
 
-        // GET: api/Sales
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Sale>>> GetSales()
+        public IActionResult GetSales()
         {
-            return await _context.Sale.ToListAsync();
+            var sales = _context.Sale.ToList();
+
+            return Ok(sales);
         }
 
-        // GET: api/Sales/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Sale>> GetSaleById(int id)
+        public IActionResult GetSaleById(int id)
         {
-            var sale = await _context.Sale.FindAsync(id);
+            var sale = _saleRepository.GetSaleById(id);
 
             if (sale == null)
             {
                 return NotFound();
             }
 
-            return sale;
+            return Ok(sale);
         }
 
-        // PUT: api/Sales/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSale(int id, Sale sale)
+        public IActionResult UpdateSale(int id, [FromBody] Sale sale)
         {
-            if (id != sale.Id)
+            if (sale == null)
             {
                 return BadRequest();
             }
-
-            _context.Entry(sale).State = EntityState.Modified;
-
+            
             try
             {
-                await _context.SaveChangesAsync();
+                var update =  _saleRepository.UpdateSale(id, sale);
+                if(update != null)
+                {
+                    return Ok();
+                }
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!SaleExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
+                
                     throw;
-                }
+                
             }
 
             return NoContent();
         }
 
-        // POST: api/Sales
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Sale>> AddSale(Sale sale)
+        public IActionResult AddSale(Sale sale)
         {
-            _context.Sale.Add(sale);
-            await _context.SaveChangesAsync();
+            var newsale = _saleRepository.AddSale(sale);
 
-            return CreatedAtAction("GetSale", new { id = sale.Id }, sale);
+            if (newsale != null)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
-        // DELETE: api/Sales/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Sale>> DeleteSale(int id)
+        public IActionResult DeleteSale(int id)
         {
-            var sale = await _context.Sale.FindAsync(id);
+            var sale = _saleRepository.DeleteSale(id);
             if (sale == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            _context.Sale.Remove(sale);
-            await _context.SaveChangesAsync();
-
-            return sale;
+            return Ok();
         }
 
-        private bool SaleExists(int id)
-        {
-            return _context.Sale.Any(e => e.Id == id);
-        }
+      
     }
 }

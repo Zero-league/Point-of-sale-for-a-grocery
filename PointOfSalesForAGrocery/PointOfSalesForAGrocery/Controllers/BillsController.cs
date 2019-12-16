@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PointOfSalesForAGrocery.Repository;
 using POS.DataSource;
 using POS.Models;
 
@@ -15,96 +16,88 @@ namespace PointOfSalesForAGrocery.Controllers
     public class BillsController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IBillRepository _billRepository;
 
-        public BillsController(AppDbContext context)
+        public BillsController(AppDbContext context, IBillRepository billRepository)
         {
             _context = context;
+            this._billRepository = billRepository;
         }
 
-        // GET: api/Bills
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bill>>> GetBills()
+        public IActionResult GetBills()
         {
-            return await _context.Bill.ToListAsync();
+            var bills = _context.Bill.ToList();
+
+            return Ok(bills);
         }
 
-        // GET: api/Bills/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Bill>> GetBillById(int id)
+        public IActionResult GetBillById(int id)
         {
-            var bill = await _context.Bill.FindAsync(id);
+            var bill = _billRepository.GetBillById(id);
 
             if (bill == null)
             {
                 return NotFound();
             }
 
-            return bill;
+            return Ok(bill);
         }
 
-        // PUT: api/Bills/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBill(int id, Bill bill)
+        public IActionResult UpdateBill(int id, [FromBody] Bill bill)
         {
-            if (id != bill.Id)
+            if (bill == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(bill).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var update =  _billRepository.UpdateBill(id, bill);
+                if(update != null)
+                {
+                    return Ok();
+                }
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!BillExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();
         }
 
-        // POST: api/Bills
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Bill>> AddBill([FromBody]Bill bill)
+        public IActionResult AddBill([FromBody]Bill bill)
         {
-            _context.Bill.Add(bill);
-            await _context.SaveChangesAsync();
+            var newbill = _billRepository.AddBill(bill);
 
-            return CreatedAtAction("GetBill", new { id = bill.Id }, bill);
+            if(newbill != null)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
-        // DELETE: api/Bills/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Bill>> DeleteBill(int id)
+        public IActionResult DeleteBill(int id)
         {
-            var bill = await _context.Bill.FindAsync(id);
+            var bill = _billRepository.DeleteBill(id);
             if (bill == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            _context.Bill.Remove(bill);
-            await _context.SaveChangesAsync();
+            return Ok();
 
-            return bill;
+            
         }
 
-        private bool BillExists(int id)
-        {
-            return _context.Bill.Any(e => e.Id == id);
-        }
+        
     }
 }

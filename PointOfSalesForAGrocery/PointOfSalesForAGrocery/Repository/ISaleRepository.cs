@@ -8,10 +8,10 @@ namespace PointOfSalesForAGrocery.Repository
 {
     public interface ISaleRepository
     {
-        Task<IEnumerable<Sale>> GetSales();
-        Task<Sale> GetSaleById(int id);
-        Task<Sale> UpdateSale(int id, Sale sale);
-        Task<Sale> AddSale(Sale sale);
-        Task<Sale> DeleteSale(int id);
+        IEnumerable<Sale> GetSales();
+        Sale GetSaleById(int id);
+        Sale UpdateSale(int id, Sale sale);
+        Sale AddSale(Sale sale);
+        Sale DeleteSale(int id);
     }
 }

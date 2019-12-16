@@ -10,8 +10,8 @@ using POS.DataSource;
 namespace POS.DataSource.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20191207123055_initialMigration")]
-    partial class initialMigration
+    [Migration("20191215185912_TestMigration")]
+    partial class TestMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace POS.DataSource.Migrations
 
             modelBuilder.Entity("POS.Models.Bill", b =>
                 {
-                    b.Property<int>("BillId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -40,14 +40,14 @@ namespace POS.DataSource.Migrations
                     b.Property<string>("SalesPerson")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("BillId");
+                    b.HasKey("Id");
 
                     b.ToTable("Bill");
                 });
 
             modelBuilder.Entity("POS.Models.Sale", b =>
                 {
-                    b.Property<int>("ItemsId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -68,7 +68,7 @@ namespace POS.DataSource.Migrations
                     b.Property<string>("SalesPerson")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ItemsId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BillId");
 

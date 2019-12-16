@@ -16,37 +16,37 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             this._DbContext = DbContext;
         }
 
-        public async Task<Bill> AddBill(Bill bill)
+        public Bill AddBill(Bill bill)
         {
-            await _DbContext.Bill.AddAsync(bill);
-            await _DbContext.SaveChangesAsync();
-            var newbill = await GetBillById(bill.Id);
+            _DbContext.Bill.Add(bill);
+            _DbContext.SaveChanges();
+            var newbill = GetBillById(bill.Id);
             return newbill;
         }
 
-        public async Task<Bill> DeleteBill(int id)
+        public Bill DeleteBill(int id)
         {
-            var removedbill = await GetBillById(id);
+            var removedbill = GetBillById(id);
             _DbContext.Bill.Remove(removedbill);
-            await _DbContext.SaveChangesAsync();
+             _DbContext.SaveChanges();
             return removedbill;
         }
 
-        public async Task<Bill> GetBillById(int id)
+        public Bill GetBillById(int id)
         {
-            var bill = await _DbContext.Bill.Where(c => c.Id == id).SingleOrDefaultAsync();
+            var bill = _DbContext.Bill.Where(c => c.Id == id).SingleOrDefault();
             return bill;
         }
 
-        public async Task<IEnumerable<Bill>> GetBills()
+        public IEnumerable<Bill> GetBills()
         {
-            var bills = await _DbContext.Bill.ToListAsync();
+            var bills = _DbContext.Bill.ToList();
             return bills;
         }
 
-        public async Task<Bill> UpdateBill(int id, Bill modifiedbill)
+        public Bill UpdateBill(int id, Bill modifiedbill)
         {
-            var bill = await GetBillById(id);
+            var bill =  GetBillById(id);
             if(bill != null)
             {
                 try
@@ -56,7 +56,7 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
                     bill.Discount = modifiedbill.Discount;
                     bill.SalesPerson = modifiedbill.SalesPerson;
 
-                    await _DbContext.SaveChangesAsync();
+                     _DbContext.SaveChanges();
 
                     return bill;
                 }

@@ -8,10 +8,10 @@ namespace PointOfSalesForAGrocery.Repository
 {
     public interface IBillRepository
     {
-        Task<IEnumerable<Bill>> GetBills();
-        Task<Bill> GetBillById(int id);
-        Task<Bill> UpdateBill(int id, Bill bill);
-        Task<Bill> AddBill(Bill bill);
-        Task<Bill> DeleteBill(int id);
+        IEnumerable<Bill> GetBills();
+        Bill GetBillById(int id);
+        Bill UpdateBill(int id, Bill bill);
+        Bill AddBill(Bill bill);
+        Bill DeleteBill(int id);
     }
 }

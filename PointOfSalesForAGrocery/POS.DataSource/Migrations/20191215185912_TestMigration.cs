@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace POS.DataSource.Migrations
 {
-    public partial class initialMigration : Migration
+    public partial class TestMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +11,7 @@ namespace POS.DataSource.Migrations
                 name: "Bill",
                 columns: table => new
                 {
-                    BillId = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DateTime = table.Column<DateTime>(nullable: false),
                     Discount = table.Column<int>(nullable: false),
@@ -20,14 +20,14 @@ namespace POS.DataSource.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bill", x => x.BillId);
+                    table.PrimaryKey("PK_Bill", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Sale",
                 columns: table => new
                 {
-                    ItemsId = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ItemsName = table.Column<string>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
@@ -37,12 +37,12 @@ namespace POS.DataSource.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sale", x => x.ItemsId);
+                    table.PrimaryKey("PK_Sale", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Sale_Bill_BillId",
                         column: x => x.BillId,
                         principalTable: "Bill",
-                        principalColumn: "BillId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
