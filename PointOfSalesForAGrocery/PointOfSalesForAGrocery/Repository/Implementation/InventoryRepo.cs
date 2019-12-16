@@ -77,19 +77,23 @@ namespace PointOfSalesForAGrocery.Repository
            
         }
 
-        public async Task<Inventory> RemoveInventory(int id)
+        public async Task RemoveInventory(int id)
         {
             var inventory = await GetInventoryById(id);
-            if (inventory == null)
-            {
-                return null;
-            }
-            else
+
+            try
             {
                 context.Inventories.Remove(inventory);
                 await context.SaveChangesAsync();
-                return inventory;
             }
+            catch (Exception)
+            {
+
+                throw;
+            }
+                
+            
+
         }
 
         public async Task<Inventory> UpdateInventory(int id, InventoryDto c)

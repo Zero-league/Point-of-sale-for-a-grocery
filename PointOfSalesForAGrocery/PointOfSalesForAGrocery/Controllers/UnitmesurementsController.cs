@@ -13,8 +13,7 @@ using POS.Models.Entities;
 namespace PointOfSalesForAGrocery.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class UnitmesurementsController : ControllerBase
+    public class UnitmesurementsController : Controller
     {
         private readonly AppDbContext _context;
         private readonly IUnitMesurementRepositorys unitMesurementRepository;
@@ -25,7 +24,7 @@ namespace PointOfSalesForAGrocery.Controllers
             this.unitMesurementRepository = unitMesurementRepository;
         }
 
-        // GET: api/Unitmesurements
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Unitmesurement>>> GetUnitmesurements()
         {
@@ -33,7 +32,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return Ok(get);
         }
 
-        // GET: api/Unitmesurements/5
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<Unitmesurement>> GetUnitmesurement(int id)
         {
@@ -47,9 +46,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return unitmesurement;
         }
 
-        // PUT: api/Unitmesurements/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUnitmesurement(int id, [FromBody] UnitmesurementDto unitmesurementDto)
         {
@@ -72,19 +69,17 @@ namespace PointOfSalesForAGrocery.Controllers
             
         }
 
-        // POST: api/Unitmesurements
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+       
         [HttpPost]
         public async Task<ActionResult<Unitmesurement>> PostUnitmesurement([FromBody] UnitmesurementDto unitmesurementDto)
         {
            
           var post =  await unitMesurementRepository.PostUnitmesurement(unitmesurementDto);
 
-            return CreatedAtAction("GetUnitmesurement", new { id = post.Id }, unitmesurementDto);
+            return Ok(post);
         }
 
-        // DELETE: api/Unitmesurements/5
+        
         [HttpDelete("{id}")]
         public async Task<ActionResult<Unitmesurement>> DeleteUnitmesurement(int id)
         {
@@ -101,9 +96,6 @@ namespace PointOfSalesForAGrocery.Controllers
             }
         }
 
-        private bool UnitmesurementExists(int id)
-        {
-            return _context.Unitmesurements.Any(e => e.Id == id);
-        }
+       
     }
 }

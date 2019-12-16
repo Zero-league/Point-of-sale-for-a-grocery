@@ -14,8 +14,7 @@ using POS.Models.Entities;
 namespace PointOfSalesForAGrocery.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class ItemLocationsController : ControllerBase
+    public class ItemLocationsController : Controller
     {
         private readonly AppDbContext _context;
         private readonly IItemLocationRepository _itemLocationRepository;
@@ -28,7 +27,7 @@ namespace PointOfSalesForAGrocery.Controllers
             this.mapper = mapper;
         }
 
-        // GET: api/ItemLocations
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItemLocation>>> GetItemLocations()
         {
@@ -37,7 +36,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return Ok(GetItemLocations);
         }
 
-        // GET: api/ItemLocations/5
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<ItemLocation>> GetItemLocation(int id)
         {
@@ -51,9 +50,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return itemLocation;
         }
 
-        // PUT: api/ItemLocations/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+       
         [HttpPut("{id}")]
         public async Task<IActionResult> PutItemLocation(int id,[FromBody] ItemLocationDto itemLocation)
         {
@@ -90,19 +87,17 @@ namespace PointOfSalesForAGrocery.Controllers
 
         }
 
-        // POST: api/ItemLocations
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+       
         [HttpPost]
         public async Task<ActionResult<ItemLocation>> PostItemLocation([FromBody] ItemLocationDto itemLocation)
         {
             var map = mapper.Map<ItemLocation>(itemLocation);
           var post =  await _itemLocationRepository.PostItemLocation(map);
 
-            return CreatedAtAction("GetItemLocation", new { id = post.Id }, itemLocation);
+            return Ok(post);
         }
 
-        // DELETE: api/ItemLocations/5
+       
         [HttpDelete("{id}")]
         public async Task<ActionResult<ItemLocation>> DeleteItemLocation(int id)
         {

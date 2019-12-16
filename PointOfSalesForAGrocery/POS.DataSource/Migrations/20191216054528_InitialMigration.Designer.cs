@@ -10,7 +10,7 @@ using POS.DataSource;
 namespace POS.DataSource.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20191206113310_InitialMigration")]
+    [Migration("20191216054528_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,51 @@ namespace POS.DataSource.Migrations
                 .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("POS.Models.Bill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Discount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SalesPerson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Bill");
+                });
+
+            modelBuilder.Entity("POS.Models.Expenses", b =>
+                {
+                    b.Property<int>("ExpId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Payment")
+                        .HasColumnType("float");
+
+                    b.Property<string>("expenseType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ExpId");
+
+                    b.ToTable("Expenses");
+                });
 
             modelBuilder.Entity("POS.Models.Inventory", b =>
                 {
@@ -31,8 +76,8 @@ namespace POS.DataSource.Migrations
                     b.Property<string>("Brand")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ExpireDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("ExpireDate")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ItemCatogaryId")
                         .HasColumnType("int");
@@ -44,6 +89,7 @@ namespace POS.DataSource.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ItemName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("QTY")
@@ -74,6 +120,7 @@ namespace POS.DataSource.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CatogaryName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -97,6 +144,36 @@ namespace POS.DataSource.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ItemLocations");
+                });
+
+            modelBuilder.Entity("POS.Models.Sale", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BillId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ItemsName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RetailPrice")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SalesPerson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BillId");
+
+                    b.ToTable("Sale");
                 });
 
             modelBuilder.Entity("POS.Models.Unitmesurement", b =>
@@ -131,6 +208,15 @@ namespace POS.DataSource.Migrations
                     b.HasOne("POS.Models.Unitmesurement", "Unitmesurement")
                         .WithMany()
                         .HasForeignKey("UnitmesurementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("POS.Models.Sale", b =>
+                {
+                    b.HasOne("POS.Models.Bill", "ParentBill")
+                        .WithMany()
+                        .HasForeignKey("BillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

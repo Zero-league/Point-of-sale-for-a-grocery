@@ -10,8 +10,7 @@ using POS.Models;
 namespace PointOfSalesForAGrocery.Controllers
 {
     [Route("api/expense")]
-    [ApiController]
-    public class ExpensesController : ControllerBase
+    public class ExpensesController : Controller
     {
         IExpensesRepository _ExpensesRepo;
 

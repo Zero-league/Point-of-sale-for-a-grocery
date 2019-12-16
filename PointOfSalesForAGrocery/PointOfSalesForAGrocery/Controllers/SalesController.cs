@@ -12,8 +12,7 @@ using POS.Models;
 namespace PointOfSalesForAGrocery.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class SalesController : ControllerBase
+    public class SalesController : Controller
     {
         private readonly AppDbContext _context;
         private readonly IMapper mapper;
@@ -24,14 +23,14 @@ namespace PointOfSalesForAGrocery.Controllers
             this.mapper = mapper;
         }
 
-        // GET: api/Sales
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Sale>>> GetSales()
         {
             return await _context.Sale.ToListAsync();
         }
 
-        // GET: api/Sales/5
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<Sale>> GetSalesById(int id)
         {
@@ -62,9 +61,7 @@ namespace PointOfSalesForAGrocery.Controllers
             
         }
 
-        // PUT: api/Sales/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+       
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateSale(int id, Sale sale)
         {
@@ -94,9 +91,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return NoContent();
         }
 
-        // POST: api/Sales
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+       
         [HttpPost]
         public async Task<ActionResult<Sale>> AddSale( [FromBody] List<Inventory> inventories)
         {
@@ -125,13 +120,13 @@ namespace PointOfSalesForAGrocery.Controllers
 
                 throw;
             }
-           
-            
 
-            return CreatedAtAction("GetSale", new { id = sale.Id }, sale);
+
+
+            return Ok();
         }
 
-        // DELETE: api/Sales/5
+        
         [HttpDelete("{id}")]
         public async Task<ActionResult<Sale>> DeleteSale(int id)
         {

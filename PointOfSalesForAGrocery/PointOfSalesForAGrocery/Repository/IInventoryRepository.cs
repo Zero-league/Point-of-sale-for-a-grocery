@@ -14,7 +14,7 @@ namespace PointOfSalesForAGrocery.Repository
         Task<ItemDto> GetInventory(int id);
         Task<Inventory> UpdateInventory(int id, InventoryDto c);
         Task<Inventory> PostInventory(Inventory inventory);
-        Task<Inventory> RemoveInventory(int id);
+        Task RemoveInventory(int id);
 
 
     }

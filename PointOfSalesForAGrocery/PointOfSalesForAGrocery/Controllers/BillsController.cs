@@ -10,9 +10,8 @@ using POS.Models;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class BillsController : ControllerBase
+    [Route("api/bills")]
+    public class BillsController : Controller
     {
         private readonly AppDbContext _context;
 
@@ -21,14 +20,14 @@ namespace PointOfSalesForAGrocery.Controllers
             _context = context;
         }
 
-        // GET: api/Bills
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Bill>>> GetBills()
         {
             return await _context.Bill.ToListAsync();
         }
 
-        // GET: api/Bills/5
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<Bill>> GetBillById(int id)
         {
@@ -42,9 +41,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return bill;
         }
 
-        // PUT: api/Bills/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBill(int id, Bill bill)
         {
@@ -74,9 +71,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return NoContent();
         }
 
-        // POST: api/Bills
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+       
         [HttpPost]
         public async Task<ActionResult<Bill>> AddBill([FromBody] Bill bill)
         {
@@ -120,7 +115,7 @@ namespace PointOfSalesForAGrocery.Controllers
             
         }
 
-        // DELETE: api/Bills/5
+      
         [HttpDelete("{id}")]
         public async Task<ActionResult<Bill>> DeleteBill(int id)
         {

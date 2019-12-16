@@ -28,7 +28,7 @@ namespace PointOfSalesForAGrocery.Controllers
             this.mapper = mapper;
         }
 
-        // GET: api/Inventories
+        
         [HttpGet("Inventories")]
         public IActionResult GetInventories()
         { 
@@ -37,7 +37,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return Ok(GetInventories);
         }
 
-        // GET: api/Inventories/5
+        
         [HttpGet("Inventories/{id}")]
         public async Task<ActionResult<ItemDto>> GetInventory(int id )
         {
@@ -51,9 +51,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return Ok(Item);
         }
 
-        // PUT: api/Inventories/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+       
         [HttpPut("Put/{id}")]
         public async Task<IActionResult> PutInventory(int id, [FromBody] InventoryDto inventoryDto)
         {
@@ -85,9 +83,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return NoContent();
         }
 
-        // POST: api/Inventories
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        
         [HttpPost("post")]
         public async Task<ActionResult<Inventory>> PostInventory([FromBody] InventoryDto c)
         {
@@ -97,7 +93,7 @@ namespace PointOfSalesForAGrocery.Controllers
 
             if (post != null)
             {
-                return CreatedAtAction("GetInventory", new { id = post.Id }, post);
+                return Ok(post);
             }
             else
             {
@@ -109,18 +105,15 @@ namespace PointOfSalesForAGrocery.Controllers
             
         }
 
-        // DELETE: api/Inventories/5
+        
         [HttpDelete("Delet/{id}")]
         public async Task<ActionResult<Inventory>> DeleteInventory(int id)
         {
 
-           var delete =  await _inventoryRepository.RemoveInventory(id);
-            if (delete == null)
-            {
-                return BadRequest();
-            }
+           await _inventoryRepository.RemoveInventory(id);
             
-            return Ok();
+            
+           return Ok();
         }
 
         private bool InventoryExists(int id)

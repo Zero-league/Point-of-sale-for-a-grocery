@@ -14,8 +14,7 @@ using POS.Models.Entities;
 namespace PointOfSalesForAGrocery.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class ItemCatogariesController : ControllerBase
+    public class ItemCatogariesController : Controller
     {
         private readonly AppDbContext _context;
 
@@ -29,7 +28,7 @@ namespace PointOfSalesForAGrocery.Controllers
             this.mapper = mapper;
         }
 
-        // GET: api/ItemCatogaries
+      
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItemCatogary>>> GetItemCatogaries()
         {
@@ -38,7 +37,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return Ok(ItemCatogaries);
         }
 
-        // GET: api/ItemCatogaries/5
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<ItemCatogary>> GetItemCatogary(int id)
         {
@@ -52,9 +51,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return itemCatogary;
         }
 
-        // PUT: api/ItemCatogaries/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> PutItemCatogary(int id, [FromBody] ItemCatogaryDto itemCatogaryDto)
         {
@@ -80,9 +77,7 @@ namespace PointOfSalesForAGrocery.Controllers
            
         }
 
-        // POST: api/ItemCatogaries
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        
         [HttpPost]
         public async Task<ActionResult<ItemCatogary>> PostItemCatogary([FromBody] ItemCatogaryDto itemCatogaryDto)
         {
@@ -92,7 +87,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return CreatedAtAction("GetItemCatogary", new { id = post.Id }, post);
         }
 
-        // DELETE: api/ItemCatogaries/5
+        
         [HttpDelete("{id}")]
         public async Task<ActionResult<ItemCatogary>> DeleteItemCatogary(int id)
         {
@@ -114,9 +109,6 @@ namespace PointOfSalesForAGrocery.Controllers
 
         }
 
-        private bool ItemCatogaryExists(int id)
-        {
-            return _context.ItemCatogaries.Any(e => e.Id == id);
-        }
+        
     }
 }

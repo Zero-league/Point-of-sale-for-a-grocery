@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
-    public class ReportController : ControllerBase
+    public class ReportController : Controller
     {
         private readonly AppDbContext Context;
 
