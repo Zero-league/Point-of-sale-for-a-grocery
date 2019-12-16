@@ -74,14 +74,10 @@ namespace PointOfSalesForAGrocery.Controllers
         {
             var newbill = _billRepository.AddBill(bill);
 
-            if(newbill != null)
-            {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
+            return Ok(newbill);
+
+           
+           
         }
 
         [HttpDelete("{id}")]

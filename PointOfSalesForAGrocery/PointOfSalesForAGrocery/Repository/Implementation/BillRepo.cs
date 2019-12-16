@@ -18,8 +18,34 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
 
         public Bill AddBill(Bill bill)
         {
-            _DbContext.Bill.Add(bill);
-            _DbContext.SaveChanges();
+            if (bill != null)
+            {
+                if (bill.Discount != 0)
+                {
+                    Bill bill1 = new Bill();
+                    bill1.Amount = bill.Amount * ((100 - bill.Discount) / 100);
+                    bill1.DateTime = bill.DateTime;
+                    bill1.Discount = bill.Discount;
+                    bill1.SalesPerson = bill.SalesPerson;
+
+                    _DbContext.Bill.Add(bill1);
+                    _DbContext.SaveChanges();
+                }
+                else
+                {
+                    Bill b = new Bill();
+                    b.Amount = bill.Amount;
+                    b.DateTime = bill.DateTime;
+                    b.Discount = bill.Discount;
+                    b.SalesPerson = bill.SalesPerson;
+
+                    _DbContext.Bill.Add(bill);
+                    _DbContext.SaveChanges();
+                }
+
+
+            }
+            
             var newbill = GetBillById(bill.Id);
             return newbill;
         }
