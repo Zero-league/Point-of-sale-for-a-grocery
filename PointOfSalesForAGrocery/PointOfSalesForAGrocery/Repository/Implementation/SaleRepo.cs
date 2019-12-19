@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using POS.DataSource;
 using POS.Models;
 using System;
@@ -11,41 +12,71 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
     public class SaleRepo : ISaleRepository
     {
         private readonly AppDbContext _DbContext;
-        public SaleRepo(AppDbContext DbContext)
+        private readonly IMapper mapper;
+
+        public SaleRepo(AppDbContext DbContext, IMapper mapper)
         {
             this._DbContext = DbContext;
+            this.mapper = mapper;
         }
-        public async Task<Sale> AddSale(Sale sale)
+        public void AddSale(List<Sale> sale)
         {
-            await _DbContext.Sale.AddAsync(sale);
-            await _DbContext.SaveChangesAsync();
-            var newsale = await GetSaleById(sale.Id);
-            return newsale;
+            Sale s = new Sale();
+            try
+            {
+
+                foreach (var item in sale)
+                {
+                    var it = mapper.Map(item, s);
+                    _DbContext.Sale.Add(it);
+                    _DbContext.SaveChanges();
+
+                    var Salaesitem = _DbContext.Inventories.Where(i => i.Id == item.Id).SingleOrDefault();
+
+                    Salaesitem.QTY -= item.Quantity;
+
+                    _DbContext.Entry(Salaesitem).State = EntityState.Modified;
+                     _DbContext.SaveChanges();
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+            //_DbContext.Sale.Add(sale);
+            // _DbContext.SaveChanges();
+            //var newsale = GetSaleById(sale.Id);
+            //return newsale;
         }
 
-        public async Task<Sale> DeleteSale(int id)
+        public Sale DeleteSale(int id)
         {
-            var removedsale = await GetSaleById(id);
+            var removedsale = GetSaleById(id);
             _DbContext.Sale.Remove(removedsale);
-            await _DbContext.SaveChangesAsync();
+            _DbContext.SaveChanges();
             return removedsale;
         }
 
-        public async Task<Sale> GetSaleById(int id)
+        public Sale GetSaleById(int id)
         {
-            var sale = await _DbContext.Sale.Where(c => c.Id == id).SingleOrDefaultAsync();
+            var sale = _DbContext.Sale.Where(c => c.Id == id).SingleOrDefault();
             return sale;
         }
 
-        public async Task<IEnumerable<Sale>> GetSales()
+        public IEnumerable<Sale> GetSales()
         {
-            var sales = await _DbContext.Sale.ToListAsync();
+            var sales = _DbContext.Sale.ToList();
             return sales;
         }
 
-        public async Task<Sale> UpdateSale(int id, Sale modifiedsale)
+        public Sale UpdateSale(int id, Sale modifiedsale)
         {
-            var sale = await GetSaleById(id);
+            var sale =  GetSaleById(id);
             if(sale != null)
             {
                 try
@@ -56,7 +87,7 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
                     sale.SalesPerson = modifiedsale.SalesPerson;
                     sale.BillId = modifiedsale.BillId;
 
-                    await _DbContext.SaveChangesAsync();
+                    _DbContext.SaveChanges();
 
                     return sale;
                 }

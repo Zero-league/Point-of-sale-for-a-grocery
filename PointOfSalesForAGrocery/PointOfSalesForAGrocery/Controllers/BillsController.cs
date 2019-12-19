@@ -5,135 +5,95 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PointOfSalesForAGrocery.Repository;
 using POS.DataSource;
 using POS.Models;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
     [Route("api/bills")]
-    public class BillsController : Controller
+    [ApiController]
+    public class BillsController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IBillRepository _billRepository;
 
-        public BillsController(AppDbContext context)
+        public BillsController(AppDbContext context, IBillRepository billRepository)
         {
             _context = context;
+            this._billRepository = billRepository;
         }
 
-        
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bill>>> GetBills()
+        public IActionResult GetBills()
         {
-            return await _context.Bill.ToListAsync();
+            var bills = _context.Bill.ToList();
+
+            return Ok(bills);
         }
 
-        
         [HttpGet("{id}")]
-        public async Task<ActionResult<Bill>> GetBillById(int id)
+        public IActionResult GetBillById(int id)
         {
-            var bill = await _context.Bill.FindAsync(id);
+            var bill = _billRepository.GetBillById(id);
 
             if (bill == null)
             {
                 return NotFound();
             }
 
-            return bill;
+            return Ok(bill);
         }
 
-        
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBill(int id, Bill bill)
+        public IActionResult UpdateBill(int id, [FromBody] Bill bill)
         {
-            if (id != bill.Id)
+            if (bill == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(bill).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var update =  _billRepository.UpdateBill(id, bill);
+                if(update != null)
+                {
+                    return Ok();
+                }
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!BillExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();
         }
 
-       
         [HttpPost]
-        public async Task<ActionResult<Bill>> AddBill([FromBody] Bill bill)
+        public IActionResult AddBill([FromBody]Bill bill,[FromBody] List<Sale> sale)
         {
-            try
+            var newbill = _billRepository.AddBill(bill,sale);
+
+            return Ok(newbill);
+
+           
+           
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteBill(int id)
+        {
+            var bill = _billRepository.DeleteBill(id);
+            if (bill == null)
             {
-                if (bill.Discount != 0)
-                {
-                    Bill bill1 = new Bill();
-                    bill1.Amount = bill.Amount * (bill.Discount / 100);
-                    bill1.DateTime = bill.DateTime;
-                    bill1.Discount = bill.Discount;
-                    bill1.SalesPerson = bill.SalesPerson;
-
-                    _context.Bill.Add(bill1);
-                    await _context.SaveChangesAsync();
-                    return Ok(bill1);
-                }
-                else
-                {
-                    Bill b = new Bill();
-                    b.Amount = bill.Amount;
-                    b.DateTime = bill.DateTime;
-                    b.Discount = bill.Discount;
-                    b.SalesPerson = bill.SalesPerson;
-
-                    _context.Bill.Add(bill);
-                    await _context.SaveChangesAsync();
-                    return Ok(b);
-                }
-
-                
-            }
-            catch (Exception)
-            {
-
                 return BadRequest();
             }
-           
 
+            return Ok();
 
             
         }
 
-      
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Bill>> DeleteBill(int id)
-        {
-            var bill = await _context.Bill.FindAsync(id);
-            if (bill == null)
-            {
-                return NotFound();
-            }
-
-            _context.Bill.Remove(bill);
-            await _context.SaveChangesAsync();
-
-            return bill;
-        }
-
-        private bool BillExists(int id)
-        {
-            return _context.Bill.Any(e => e.Id == id);
-        }
+        
     }
 }

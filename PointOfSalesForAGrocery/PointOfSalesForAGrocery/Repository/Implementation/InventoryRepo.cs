@@ -59,13 +59,14 @@ namespace PointOfSalesForAGrocery.Repository
             return get;
 
         }
-            public async Task<Inventory> PostInventory(Inventory inventor)
+            public async Task<Inventory> PostInventory(InventoryDto inventoryDto)
         {
+            var finalitem = mapper.Map<Inventory>(inventoryDto);
             try
             {
-                await context.Inventories.AddAsync(inventor);
+                await context.Inventories.AddAsync(finalitem);
                 await context.SaveChangesAsync();
-                var item = await GetInventoryById(inventor.Id);
+                var item = await GetInventoryById(finalitem.Id);
                 return item;
             }
             catch (Exception)

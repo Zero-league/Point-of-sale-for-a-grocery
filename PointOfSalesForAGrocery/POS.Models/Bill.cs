@@ -9,14 +9,14 @@ namespace POS.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
         [Required]
         [DataType(DataType.Date)]
         public DateTime DateTime { get; set; }
-        public int Discount { get; set; }
-
+        public float Discount { get; set; }
         [Required]
-        public int Amount { get; set; }
+        public float GroceAmount { get; set; }
+        [Required]
+        public float NetAmount { get; set; }
         public string SalesPerson { get; set; }
     }
 }

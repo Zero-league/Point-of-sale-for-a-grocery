@@ -19,13 +19,11 @@ namespace PointOfSalesForAGrocery.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IInventoryRepository _inventoryRepository;
-        private readonly IMapper mapper;
 
-        public InventoriesController(AppDbContext context, IInventoryRepository inventoryRepository, IMapper mapper)
+        public InventoriesController(AppDbContext context, IInventoryRepository inventoryRepository)
         {
             _context = context;
             this._inventoryRepository = inventoryRepository;
-            this.mapper = mapper;
         }
 
         
@@ -85,31 +83,36 @@ namespace PointOfSalesForAGrocery.Controllers
 
         
         [HttpPost("post")]
-        public async Task<ActionResult<Inventory>> PostInventory([FromBody] InventoryDto c)
+        public async Task<ActionResult<Inventory>> PostInventory([FromBody] InventoryDto inventoryDto)
         {
-           
-            var finalitem = mapper.Map<Inventory>(c);
-            var post = await _inventoryRepository.PostInventory(finalitem);
-
-            if (post != null)
+            if (inventoryDto == null)
             {
-                return Ok(post);
+                return BadRequest();
+            }
+            Inventory inventory = new Inventory(); 
+            if (ModelState.IsValid)
+            {
+                inventory = await _inventoryRepository.PostInventory(inventoryDto);
+            }
+            if (inventory != null)
+            {
+                return Ok(inventory);
             }
             else
             {
                 return BadRequest();
             }
 
-            
-
-            
         }
 
         
         [HttpDelete("Delet/{id}")]
         public async Task<ActionResult<Inventory>> DeleteInventory(int id)
         {
-
+            if (id == 0 )
+            {
+                return BadRequest();
+            }
            await _inventoryRepository.RemoveInventory(id);
             
             

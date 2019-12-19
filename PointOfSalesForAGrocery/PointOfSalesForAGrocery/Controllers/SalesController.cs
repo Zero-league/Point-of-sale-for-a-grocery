@@ -2,149 +2,103 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PointOfSalesForAGrocery.Repository;
 using POS.DataSource;
 using POS.Models;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
-    [Route("api/[controller]")]
-    public class SalesController : Controller
+    [Route("api/sales")]
+    [ApiController]
+    public class SalesController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly IMapper mapper;
+        private readonly ISaleRepository _saleRepository;
 
-        public SalesController(AppDbContext context, IMapper mapper)
+        public SalesController(AppDbContext context, ISaleRepository saleRepository)
         {
             _context = context;
-            this.mapper = mapper;
+            this._saleRepository = saleRepository;
         }
 
-        
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Sale>>> GetSales()
+        public IActionResult GetSales()
         {
-            return await _context.Sale.ToListAsync();
+            var sales = _context.Sale.ToList();
+
+            return Ok(sales);
         }
 
-        
         [HttpGet("{id}")]
-        public async Task<ActionResult<Sale>> GetSalesById(int id)
+        public IActionResult GetSaleById(int id)
         {
-
-            var sale = await _context.Sale.FindAsync(id);
+            var sale = _saleRepository.GetSaleById(id);
 
             if (sale == null)
             {
                 return NotFound();
             }
 
-            return sale;
+            return Ok(sale);
         }
-        [HttpGet("item")]
-        public async Task<ActionResult<IEnumerable< Inventory>>> GetSaleItem(string quarystring)
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateSale(int id, [FromBody] Sale sale)
         {
-            var salesitem = from m in _context.Inventories
-                            select m;
-            if (!string.IsNullOrEmpty(quarystring))
-            {
-                salesitem = salesitem.Where(i => i.ItemName.Contains(quarystring));
-                return await salesitem.ToListAsync();
-            }
-            else
+            if (sale == null)
             {
                 return BadRequest();
             }
             
-        }
-
-       
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSale(int id, Sale sale)
-        {
-            if (id != sale.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(sale).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var update =  _saleRepository.UpdateSale(id, sale);
+                if(update != null)
+                {
+                    return Ok();
+                }
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!SaleExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
+                
                     throw;
-                }
+                
             }
 
             return NoContent();
         }
 
-       
         [HttpPost]
-        public async Task<ActionResult<Sale>> AddSale( [FromBody] List<Inventory> inventories)
+        public IActionResult AddSale(List<Sale> sale)
         {
-            Sale sale = new Sale();
-            try
+            
+
+            if (sale != null)
             {
-               
-                foreach (var item in inventories)
-                {
-                    var it = mapper.Map(item, sale);
-                    _context.Sale.Add(it);
-                    await _context.SaveChangesAsync();
-
-                    var Salaesitem = await _context.Inventories.Where(i => i.Id == item.Id).SingleOrDefaultAsync();
-
-                    Salaesitem.QTY -= item.QTY;
-
-                    _context.Entry(Salaesitem).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                }
-
-
+              _saleRepository.AddSale(sale);
+                return Ok();
             }
-            catch (Exception)
+            else
             {
-
-                throw;
+                return BadRequest();
             }
+        }
 
-
+        [HttpDelete("{id}")]
+        public IActionResult DeleteSale(int id)
+        {
+            var sale = _saleRepository.DeleteSale(id);
+            if (sale == null)
+            {
+                return BadRequest();
+            }
 
             return Ok();
         }
 
-        
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Sale>> DeleteSale(int id)
-        {
-            var sale = await _context.Sale.FindAsync(id);
-            if (sale == null)
-            {
-                return NotFound();
-            }
-
-            _context.Sale.Remove(sale);
-            await _context.SaveChangesAsync();
-
-            return sale;
-        }
-
-        private bool SaleExists(int id)
-        {
-            return _context.Sale.Any(e => e.Id == id);
-        }
+      
     }
 }

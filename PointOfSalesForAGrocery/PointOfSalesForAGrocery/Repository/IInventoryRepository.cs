@@ -13,7 +13,7 @@ namespace PointOfSalesForAGrocery.Repository
         Task<IEnumerable< Inventory>> GetInventories();
         Task<ItemDto> GetInventory(int id);
         Task<Inventory> UpdateInventory(int id, InventoryDto c);
-        Task<Inventory> PostInventory(Inventory inventory);
+        Task<Inventory> PostInventory(InventoryDto inventoryDto);
         Task RemoveInventory(int id);
 
 
