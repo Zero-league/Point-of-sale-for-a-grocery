@@ -11,6 +11,8 @@
     <Compile Remove="Migrations\20191216053449_ChangeModelanotations.Designer.cs" />
     <Compile Remove="Migrations\20191216054343_ChangeModelAndCreateExpenses.cs" />
     <Compile Remove="Migrations\20191216054343_ChangeModelAndCreateExpenses.Designer.cs" />
+    <Compile Remove="Migrations\20191219080009_ChangeBillModel.cs" />
+    <Compile Remove="Migrations\20191219080009_ChangeBillModel.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

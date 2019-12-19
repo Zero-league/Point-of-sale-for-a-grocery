@@ -26,14 +26,17 @@ namespace POS.DataSource.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Discount")
-                        .HasColumnType("int");
+                    b.Property<float>("Discount")
+                        .HasColumnType("real");
+
+                    b.Property<float>("GroceAmount")
+                        .HasColumnType("real");
+
+                    b.Property<float>("NetAmount")
+                        .HasColumnType("real");
 
                     b.Property<string>("SalesPerson")
                         .HasColumnType("nvarchar(max)");
