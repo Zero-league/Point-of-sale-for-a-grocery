@@ -24,7 +24,7 @@ namespace POS.Models
         public string SalesPerson { get; set; }
 
         [ForeignKey("BillId")]
-        public Bill ParentBill { get; set; }
+        public virtual Bill ParentBill { get; set; }
         public int BillId { get; set; }
     }
 }

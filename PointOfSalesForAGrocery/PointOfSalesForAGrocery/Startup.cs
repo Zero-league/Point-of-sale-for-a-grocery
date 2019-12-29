@@ -34,6 +34,7 @@ namespace PointOfSalesForAGrocery
             services.AddDbContext<AppDbContext>();
 
             services.AddTransient<IBillRepository, BillRepo>();
+            services.AddTransient<ISaleRepository, SaleRepo>();
 
             services.AddCors(options =>
             {
