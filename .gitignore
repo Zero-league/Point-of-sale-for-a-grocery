@@ -330,13 +330,8 @@ ASALocalRun/
 .mfractor/
 
 #Ignore Migration files
-PointOfSalesForAGrocery/PointOfSalesForAGrocery/POS.DataSource/Migrations
+PointOfSalesForAGrocery/POS.DataSource/Migrations/
 #Ignore Startup files
 PointOfSalesForAGrocery/PointOfSalesForAGrocery/Startup.cs
 #Ignore appsettings files
 PointOfSalesForAGrocery/PointOfSalesForAGrocery/appsettings.json
-PointOfSalesForAGrocery/POS.DataSource/Migrations/20191215185912_TestMigration.cs
-PointOfSalesForAGrocery/POS.DataSource/Migrations/20191215185912_TestMigration.Designer.cs
-PointOfSalesForAGrocery/POS.DataSource/Migrations/20191216054528_InitialMigration.cs
-PointOfSalesForAGrocery/POS.DataSource/Migrations/20191216054528_InitialMigration.Designer.cs
-PointOfSalesForAGrocery/POS.DataSource/Migrations/20191219080316_InitialMigration.cs
