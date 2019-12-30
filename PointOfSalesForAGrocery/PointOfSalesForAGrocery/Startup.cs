@@ -16,6 +16,7 @@ using AutoMapper;
 using PointOfSalesForAGrocery.Repository;
 using POS.Models;
 using PointOfSalesForAGrocery.Repository.Implementation;
+using Microsoft.AspNetCore.Identity;
 
 namespace PointOfSalesForAGrocery
 {
@@ -34,12 +35,19 @@ namespace PointOfSalesForAGrocery
             string constring = Configuration["ConnectionString:Constring"];
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer("Data Source=.\\MSSQL;Initial Catalog=POSSYSTEM;Integrated Security=True"));
 
-            
+            services.AddControllers().AddNewtonsoftJson();
+            services.AddDefaultIdentity<IdentityUser>()
+                //.AddDefaultUI(UIFramework.Bootstrap4)
+                .AddEntityFrameworkStores<AppDbContext>();
 
             services.AddScoped<IInventoryRepository, InventoryRepo>();
             services.AddScoped<IExpensesRepository, ExpensesRepo>();
+            services.AddScoped<IBillRepository, BillRepo>();
 
             services.AddAutoMapper(typeof(AuttoMapping));
+            services.AddMvc().AddNewtonsoftJson();
+            
+
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
@@ -72,7 +80,7 @@ namespace PointOfSalesForAGrocery
             app.UseRouting();
 
             app.UseCors("MyAllowSpecificOrigins");
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

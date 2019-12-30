@@ -18,11 +18,11 @@ namespace POS.Models
         public int ItemCost { get; set; }
         public int RetailPrice { get; set; }
         [ForeignKey("ItemCatogaryId")]
-        public ItemCatogary ItemCatogary { get; set; }
+        public virtual ItemCatogary ItemCatogary { get; set; }
         [ForeignKey("ItemLocationId")]
-        public ItemLocation ItemLocation { get; set; }
+        public virtual ItemLocation ItemLocation { get; set; }
         [ForeignKey("UnitmesurementId")]
-        public Unitmesurement Unitmesurement { get; set; }
+        public virtual Unitmesurement Unitmesurement { get; set; }
         public int ItemCatogaryId { get; set; }
         public int ItemLocationId { get; set; }
         public int UnitmesurementId { get; set; }

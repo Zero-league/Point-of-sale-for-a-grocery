@@ -13,9 +13,12 @@
     <Compile Remove="Migrations\20191216054343_ChangeModelAndCreateExpenses.Designer.cs" />
     <Compile Remove="Migrations\20191219080009_ChangeBillModel.cs" />
     <Compile Remove="Migrations\20191219080009_ChangeBillModel.Designer.cs" />
+    <Compile Remove="Migrations\20191222180517_IdentityMigration2.cs" />
+    <Compile Remove="Migrations\20191222180517_IdentityMigration2.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0">
       <PrivateAssets>all</PrivateAssets>

@@ -26,18 +26,18 @@ namespace PointOfSalesForAGrocery.Controllers
             this._inventoryRepository = inventoryRepository;
         }
 
-        
+
         [HttpGet("Inventories")]
-        public IActionResult GetInventories()
-        { 
-            var GetInventories =   _context.Inventories.ToList();
+        public async Task<ActionResult<IEnumerable<ItemDto>>> GetInventories()
+        {
+            var GetInventories = await _inventoryRepository.GetInventories();
 
             return Ok(GetInventories);
         }
 
-        
+
         [HttpGet("Inventories/{id}")]
-        public async Task<ActionResult<ItemDto>> GetInventory(int id )
+        public async Task<ActionResult<ItemDto>> GetInventory(int id)
         {
             var Item = await _inventoryRepository.GetInventory(id);
 
@@ -49,7 +49,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return Ok(Item);
         }
 
-       
+
         [HttpPut("Put/{id}")]
         public async Task<IActionResult> PutInventory(int id, [FromBody] InventoryDto inventoryDto)
         {
@@ -57,10 +57,10 @@ namespace PointOfSalesForAGrocery.Controllers
             {
                 return BadRequest();
             }
-            
+
             try
             {
-               var update = await _inventoryRepository.UpdateInventory(id, inventoryDto);
+                var update = await _inventoryRepository.UpdateInventory(id, inventoryDto);
                 if (update != null)
                 {
                     return Ok();
@@ -81,7 +81,7 @@ namespace PointOfSalesForAGrocery.Controllers
             return NoContent();
         }
 
-        
+
         [HttpPost("post")]
         public async Task<ActionResult<Inventory>> PostInventory([FromBody] InventoryDto inventoryDto)
         {
@@ -89,7 +89,7 @@ namespace PointOfSalesForAGrocery.Controllers
             {
                 return BadRequest();
             }
-            Inventory inventory = new Inventory(); 
+            Inventory inventory = new Inventory();
             if (ModelState.IsValid)
             {
                 inventory = await _inventoryRepository.PostInventory(inventoryDto);
@@ -105,23 +105,25 @@ namespace PointOfSalesForAGrocery.Controllers
 
         }
 
-        
+
         [HttpDelete("Delet/{id}")]
         public async Task<ActionResult<Inventory>> DeleteInventory(int id)
         {
-            if (id == 0 )
+            if (id == 0)
             {
                 return BadRequest();
             }
-           await _inventoryRepository.RemoveInventory(id);
-            
-            
-           return Ok();
+            await _inventoryRepository.RemoveInventory(id);
+
+
+            return Ok();
         }
 
         private bool InventoryExists(int id)
         {
             return _context.Inventories.Any(e => e.Id == id);
         }
+
+
     }
 }

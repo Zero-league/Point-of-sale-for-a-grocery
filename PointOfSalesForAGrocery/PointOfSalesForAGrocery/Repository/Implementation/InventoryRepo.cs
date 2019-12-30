@@ -22,9 +22,14 @@ namespace PointOfSalesForAGrocery.Repository
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<Inventory>> GetInventories()
+        public async Task<IEnumerable<ItemDto>> GetInventories()
         {
-            var get = await context.Inventories.ToListAsync();
+            var get = await (from i in context.Inventories
+                             join c in context.ItemCatogaries on i.ItemCatogaryId equals c.Id
+                             join l in context.ItemLocations on i.ItemLocationId equals l.Id
+                             join m in context.Unitmesurements on i.UnitmesurementId equals m.Id
+                             select new ItemDto { Id= i.Id, ItemName=i.ItemName, ExpireDate=i.ExpireDate, QTY=i.QTY, Brand=i.Brand, ItemCost= i.ItemCost, RetailPrice=i.RetailPrice, CatogaryName=c.CatogaryName, LocationName=l.LocationName, Position=l.Position, mesurementName= m.mesurementName }).ToListAsync(); ;
+            InventoryDto dto = new InventoryDto();
             return get;
         }
 
@@ -35,22 +40,11 @@ namespace PointOfSalesForAGrocery.Repository
                              join l in context.ItemLocations on i.ItemLocationId equals l.Id
                              join m in context.Unitmesurements on i.UnitmesurementId equals m.Id
                              where i.Id == id
-                             select new {i.Id, i.ItemName,i.ExpireDate,i.QTY,i.Brand,i.ItemCost,i.RetailPrice,c.CatogaryName,l.LocationName,l.Position,m.mesurementName }).SingleOrDefaultAsync();
+                             select new ItemDto { Id = i.Id, ItemName = i.ItemName, ExpireDate = i.ExpireDate, QTY = i.QTY, Brand = i.Brand, ItemCost = i.ItemCost, RetailPrice = i.RetailPrice, CatogaryName = c.CatogaryName, LocationName = l.LocationName, Position = l.Position, mesurementName = m.mesurementName }).SingleOrDefaultAsync();
 
-            ItemDto it = new ItemDto();
-            it.Id = get.Id;
-            it.ItemName = get.ItemName;
-            it.ExpireDate = get.ExpireDate;
-            it.QTY = get.QTY;
-            it.Brand = get.Brand;
-            it.ItemCost = get.ItemCost;
-            it.RetailPrice = get.RetailPrice;
-            it.CatogaryName = get.CatogaryName;
-            it.LocationName = get.LocationName;
-            it.Position = get.Position;
-            it.mesurementName = get.mesurementName;
+          
             
-            return it;
+            return get;
 
         }
         public async Task<Inventory> GetInventoryById(int id)

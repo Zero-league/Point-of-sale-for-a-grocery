@@ -58,6 +58,7 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
                 expense.Payment = ExpensesObject.Payment;
                 _appDbContext.SaveChanges();
                 return 1;
+
             }
             //throw new NotImplementedException();
         }
