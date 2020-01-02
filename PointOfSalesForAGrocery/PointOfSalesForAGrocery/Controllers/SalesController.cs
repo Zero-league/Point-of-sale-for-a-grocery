@@ -72,12 +72,13 @@ namespace PointOfSalesForAGrocery.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddSale(Sale sale)
+        public IActionResult AddSale(List<Sale> sale)
         {
-            var newsale = _saleRepository.AddSale(sale);
+            
 
-            if (newsale != null)
+            if (sale != null)
             {
+              _saleRepository.AddSale(sale);
                 return Ok();
             }
             else

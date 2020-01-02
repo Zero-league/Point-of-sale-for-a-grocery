@@ -1,10 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20191206094651_InitialMigration.cs" />
+    <Compile Remove="Migrations\20191206094651_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20191216053449_ChangeModelanotations.cs" />
+    <Compile Remove="Migrations\20191216053449_ChangeModelanotations.Designer.cs" />
+    <Compile Remove="Migrations\20191216054343_ChangeModelAndCreateExpenses.cs" />
+    <Compile Remove="Migrations\20191216054343_ChangeModelAndCreateExpenses.Designer.cs" />
+    <Compile Remove="Migrations\20191219080009_ChangeBillModel.cs" />
+    <Compile Remove="Migrations\20191219080009_ChangeBillModel.Designer.cs" />
+    <Compile Remove="Migrations\20191222180517_IdentityMigration2.cs" />
+    <Compile Remove="Migrations\20191222180517_IdentityMigration2.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0">
       <PrivateAssets>all</PrivateAssets>

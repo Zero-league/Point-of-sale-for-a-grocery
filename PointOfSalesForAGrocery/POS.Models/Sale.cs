@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace POS.Models
 {
@@ -20,7 +17,7 @@ namespace POS.Models
 
         [Required]
         public int RetailPrice { get; set; }
-        
+
         public string SalesPerson { get; set; }
 
         [ForeignKey("BillId")]

@@ -16,10 +16,47 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             this._DbContext = DbContext;
         }
 
-        public Bill AddBill(Bill bill)
+        public Bill AddBill(Bill bill,List<Sale> sale)
         {
-            _DbContext.Bill.Add(bill);
-            _DbContext.SaveChanges();
+            float amo = 0;
+            if (sale != null)
+            {
+                foreach (var item in sale)
+                {
+                    amo += item.RetailPrice;
+
+                }
+            }
+            if (bill != null)
+            {
+                if (bill.Discount != 0)
+                {
+                    Bill bill1 = new Bill();
+                    bill1.NetAmount = amo;
+                    bill1.GroceAmount = amo * ((100 - bill.Discount) / 100);
+                    bill1.DateTime = bill.DateTime;
+                    bill1.Discount = bill.Discount;
+                    bill1.SalesPerson = bill.SalesPerson;
+
+                    _DbContext.Bill.Add(bill1);
+                    _DbContext.SaveChanges();
+                }
+                else
+                {
+                    Bill bill1 = new Bill();
+                    bill1.NetAmount = amo;
+                    bill1.GroceAmount = amo;
+                    bill1.DateTime = bill.DateTime;
+                    bill1.Discount = bill.Discount;
+                    bill1.SalesPerson = bill.SalesPerson;
+
+                    _DbContext.Bill.Add(bill);
+                    _DbContext.SaveChanges();
+                }
+
+
+            }
+            
             var newbill = GetBillById(bill.Id);
             return newbill;
         }
@@ -52,7 +89,8 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
                 try
                 {
                     bill.DateTime = modifiedbill.DateTime;
-                    bill.Amount = modifiedbill.Amount;
+                    bill.NetAmount = modifiedbill.NetAmount;
+                    bill.GroceAmount = modifiedbill.GroceAmount;
                     bill.Discount = modifiedbill.Discount;
                     bill.SalesPerson = modifiedbill.SalesPerson;
 

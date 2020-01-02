@@ -1,4 +1,5 @@
-﻿using POS.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using POS.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace PointOfSalesForAGrocery.Repository
         IEnumerable<Sale> GetSales();
         Sale GetSaleById(int id);
         Sale UpdateSale(int id, Sale sale);
-        Sale AddSale(Sale sale);
+        void AddSale(List<Sale> sale);
         Sale DeleteSale(int id);
     }
 }

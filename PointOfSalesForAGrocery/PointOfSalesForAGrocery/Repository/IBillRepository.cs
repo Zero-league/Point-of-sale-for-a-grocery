@@ -11,7 +11,7 @@ namespace PointOfSalesForAGrocery.Repository
         IEnumerable<Bill> GetBills();
         Bill GetBillById(int id);
         Bill UpdateBill(int id, Bill bill);
-        Bill AddBill(Bill bill);
+        Bill AddBill(Bill bill, List<Sale> sale);
         Bill DeleteBill(int id);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using POS.DataSource;
 using POS.Models;
 using System;
@@ -11,16 +12,46 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
     public class SaleRepo : ISaleRepository
     {
         private readonly AppDbContext _DbContext;
-        public SaleRepo(AppDbContext DbContext)
+        private readonly IMapper mapper;
+
+        public SaleRepo(AppDbContext DbContext, IMapper mapper)
         {
             this._DbContext = DbContext;
+            this.mapper = mapper;
         }
-        public Sale AddSale(Sale sale)
+        public void AddSale(List<Sale> sale)
         {
-            _DbContext.Sale.Add(sale);
-             _DbContext.SaveChanges();
-            var newsale = GetSaleById(sale.Id);
-            return newsale;
+            Sale s = new Sale();
+            try
+            {
+
+                foreach (var item in sale)
+                {
+                    var it = mapper.Map(item, s);
+                    _DbContext.Sale.Add(it);
+                    _DbContext.SaveChanges();
+
+                    var Salaesitem = _DbContext.Inventories.Where(i => i.Id == item.Id).SingleOrDefault();
+
+                    Salaesitem.QTY -= item.Quantity;
+
+                    _DbContext.Entry(Salaesitem).State = EntityState.Modified;
+                     _DbContext.SaveChanges();
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+            //_DbContext.Sale.Add(sale);
+            // _DbContext.SaveChanges();
+            //var newsale = GetSaleById(sale.Id);
+            //return newsale;
         }
 
         public Sale DeleteSale(int id)

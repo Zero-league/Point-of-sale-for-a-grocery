@@ -70,18 +70,14 @@ namespace PointOfSalesForAGrocery.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddBill([FromBody]Bill bill)
+        public IActionResult AddBill([FromBody]Bill bill,[FromRoute] List<Sale> sale)
         {
-            var newbill = _billRepository.AddBill(bill);
+            var newbill = _billRepository.AddBill(bill,sale);
 
-            if(newbill != null)
-            {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
+            return Ok(newbill);
+
+           
+           
         }
 
         [HttpDelete("{id}")]
