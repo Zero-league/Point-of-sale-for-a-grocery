@@ -13,7 +13,7 @@ using POS.Models.Entities;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     public class ItemLocationsController : Controller
     {
         private readonly AppDbContext _context;
@@ -28,7 +28,7 @@ namespace PointOfSalesForAGrocery.Controllers
         }
 
         
-        [HttpGet]
+        [HttpGet("Locations")]
         public async Task<ActionResult<IEnumerable<ItemLocation>>> GetItemLocations()
         {
             var GetItemLocations = await _itemLocationRepository.GetItemLocations();
@@ -88,7 +88,7 @@ namespace PointOfSalesForAGrocery.Controllers
         }
 
        
-        [HttpPost]
+        [HttpPost("Location/post")]
         public async Task<ActionResult<ItemLocation>> PostItemLocation([FromBody] ItemLocationDto itemLocation)
         {
             var map = mapper.Map<ItemLocation>(itemLocation);
@@ -98,7 +98,7 @@ namespace PointOfSalesForAGrocery.Controllers
         }
 
        
-        [HttpDelete("{id}")]
+        [HttpDelete("del/{id}")]
         public async Task<ActionResult<ItemLocation>> DeleteItemLocation(int id)
         {
            

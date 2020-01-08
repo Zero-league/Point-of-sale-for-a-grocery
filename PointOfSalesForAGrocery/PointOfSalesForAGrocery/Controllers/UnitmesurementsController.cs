@@ -12,7 +12,7 @@ using POS.Models.Entities;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     public class UnitmesurementsController : Controller
     {
         private readonly AppDbContext _context;
@@ -25,7 +25,7 @@ namespace PointOfSalesForAGrocery.Controllers
         }
 
         
-        [HttpGet]
+        [HttpGet("Unitmesurements")]
         public async Task<ActionResult<IEnumerable<Unitmesurement>>> GetUnitmesurements()
         {
            var get =  await unitMesurementRepository.GetUnitmesurements();

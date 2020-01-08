@@ -50,9 +50,10 @@ namespace PointOfSalesForAGrocery.Controllers
         }
 
 
-        [HttpPut("Put/{id}")]
-        public async Task<IActionResult> PutInventory(int id, [FromBody] InventoryDto inventoryDto)
+        [HttpPut("Put/{ID}")]
+        public async Task<IActionResult> PutInventory(string ID, [FromBody] InventoryDto inventoryDto)
         {
+            int id = int.Parse(ID);
             if (inventoryDto == null)
             {
                 return BadRequest();
@@ -63,7 +64,7 @@ namespace PointOfSalesForAGrocery.Controllers
                 var update = await _inventoryRepository.UpdateInventory(id, inventoryDto);
                 if (update != null)
                 {
-                    return Ok();
+                    return Ok(update);
                 }
             }
             catch (DbUpdateConcurrencyException)

@@ -28,7 +28,7 @@ namespace PointOfSalesForAGrocery.Repository
                              join c in context.ItemCatogaries on i.ItemCatogaryId equals c.Id
                              join l in context.ItemLocations on i.ItemLocationId equals l.Id
                              join m in context.Unitmesurements on i.UnitmesurementId equals m.Id
-                             select new ItemDto { Id= i.Id, ItemName=i.ItemName, ExpireDate=i.ExpireDate, QTY=i.QTY, Brand=i.Brand, ItemCost= i.ItemCost, RetailPrice=i.RetailPrice, CatogaryName=c.CatogaryName, LocationName=l.LocationName, Position=l.Position, mesurementName= m.mesurementName }).ToListAsync(); ;
+                             select new ItemDto { Id= i.Id, ItemName=i.ItemName, ExpireDate=i.ExpireDate, QTY=i.QTY, Brand=i.Brand, ItemCost= i.ItemCost, RetailPrice=i.RetailPrice, CatogaryName=c.CatogaryName, LocationName=l.LocationName, Position=l.Position, mesurementName= m.mesurementName, CatogaryID=c.Id, LocationID=l.Id, mesurementID=m.Id }).ToListAsync(); ;
             InventoryDto dto = new InventoryDto();
             return get;
         }
@@ -63,10 +63,10 @@ namespace PointOfSalesForAGrocery.Repository
                 var item = await GetInventoryById(finalitem.Id);
                 return item;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                return null;
+                throw new Exception(ex.Message);
+                
             }
             
            

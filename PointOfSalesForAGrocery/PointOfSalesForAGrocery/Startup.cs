@@ -41,6 +41,9 @@ namespace PointOfSalesForAGrocery
                 .AddEntityFrameworkStores<AppDbContext>();
 
             services.AddScoped<IInventoryRepository, InventoryRepo>();
+            services.AddScoped<IItemCatogaryRepository, ItemCatogaryRepo>();
+            services.AddScoped<IItemLocationRepository, ItemlocationRepo>();
+            services.AddScoped<IUnitMesurementRepositorys, UnitMesurementRepo>();
             services.AddScoped<IExpensesRepository, ExpensesRepo>();
             services.AddScoped<IBillRepository, BillRepo>();
 

@@ -13,7 +13,7 @@ using POS.Models.Entities;
 
 namespace PointOfSalesForAGrocery.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     public class ItemCatogariesController : Controller
     {
         private readonly AppDbContext _context;
@@ -29,7 +29,7 @@ namespace PointOfSalesForAGrocery.Controllers
         }
 
       
-        [HttpGet]
+        [HttpGet("Catagaries")]
         public async Task<ActionResult<IEnumerable<ItemCatogary>>> GetItemCatogaries()
         {
             var ItemCatogaries =  await _itemCatogaryRepository.GetItemCatogaries();
@@ -78,17 +78,17 @@ namespace PointOfSalesForAGrocery.Controllers
         }
 
         
-        [HttpPost]
+        [HttpPost("cat/post")]
         public async Task<ActionResult<ItemCatogary>> PostItemCatogary([FromBody] ItemCatogaryDto itemCatogaryDto)
         {
             var map = mapper.Map<ItemCatogary>(itemCatogaryDto);   
           var post =  await _itemCatogaryRepository.PostItemCatogary(map);
 
-            return CreatedAtAction("GetItemCatogary", new { id = post.Id }, post);
+            return Ok(post);
         }
 
         
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteCat/{id}")]
         public async Task<ActionResult<ItemCatogary>> DeleteItemCatogary(int id)
         {
             var itemCatogary = await _itemCatogaryRepository.GetItemCatogary(id);

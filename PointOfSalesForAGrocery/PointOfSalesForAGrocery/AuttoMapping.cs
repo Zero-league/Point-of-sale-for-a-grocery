@@ -11,7 +11,9 @@ namespace POS.Models
         public AuttoMapping()
         {
             CreateMap<InventoryDto,Inventory>();
-           
+            CreateMap<ItemLocationDto, ItemLocation>();
+            CreateMap<ItemCatogaryDto, ItemCatogary>();
+
         }
     }
 }

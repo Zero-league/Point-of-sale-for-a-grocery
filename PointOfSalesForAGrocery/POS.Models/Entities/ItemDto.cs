@@ -17,5 +17,9 @@ namespace POS.Models.Entities
         public string LocationName { get; set; }
         public string Position { get; set; }
         public string mesurementName { get; set; }
+        public int CatogaryID { get; set; }
+        public int LocationID { get; set; }
+        public int PositionID { get; set; }
+        public int mesurementID { get; set; }
     }
 }
