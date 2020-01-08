@@ -19,40 +19,68 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             this._DbContext = DbContext;
             this.mapper = mapper;
         }
-        public void AddSale(List<Sale> sale)
+
+        public bool AddSale(Sale sale)
         {
-            Sale s = new Sale();
-            try
-            {
+             _DbContext.Sale.Add(sale);
+            var addSale = _DbContext.SaveChanges();
 
-                foreach (var item in sale)
-                {
-                    var it = mapper.Map(item, s);
-                    _DbContext.Sale.Add(it);
-                    _DbContext.SaveChanges();
-
-                    var Salaesitem = _DbContext.Inventories.Where(i => i.Id == item.Id).SingleOrDefault();
-
-                    Salaesitem.QTY -= item.Quantity;
-
-                    _DbContext.Entry(Salaesitem).State = EntityState.Modified;
-                     _DbContext.SaveChanges();
-                }
-
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-
-            //_DbContext.Sale.Add(sale);
-            // _DbContext.SaveChanges();
-            //var newsale = GetSaleById(sale.Id);
-            //return newsale;
+            return addSale > 0 ? true : false;
         }
+
+        //public Sale DeleteSale(int id)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Sale GetSaleById(int id)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public IEnumerable<Sale> GetSales()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Sale UpdateSale(int id, Sale sale)
+        //{
+        //    throw new NotImplementedException();
+        //}
+        //public void AddSale(List<Sale> sale)
+        //{
+        //    Sale s = new Sale();
+        //    try
+        //    {
+
+        //        foreach (var item in sale)
+        //        {
+        //            var it = mapper.Map(item, s);
+        //            _DbContext.Sale.Add(it);
+        //            _DbContext.SaveChanges();
+
+        //            var Salaesitem = _DbContext.Inventories.Where(i => i.Id == item.Id).SingleOrDefault();
+
+        //            Salaesitem.QTY -= item.Quantity;
+
+        //            _DbContext.Entry(Salaesitem).State = EntityState.Modified;
+        //             _DbContext.SaveChanges();
+        //        }
+
+
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+
+
+        //_DbContext.Sale.Add(sale);
+        // _DbContext.SaveChanges();
+        //var newsale = GetSaleById(sale.Id);
+        //return newsale;
+    //}
 
         public Sale DeleteSale(int id)
         {

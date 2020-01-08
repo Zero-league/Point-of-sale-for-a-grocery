@@ -11,7 +11,7 @@ namespace POS.DataSource
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            
+
         }
 
         public DbSet<Inventory>  Inventories { get; set; }
@@ -21,5 +21,13 @@ namespace POS.DataSource
         public DbSet<Expenses> Expenses { get; set; }
         public DbSet<Bill> Bill { get; set; }
         public DbSet<Sale> Sale { get; set; }
+
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder builder)
+        //{
+        //    string SqlConnectionString = "Server=.\\SQLEXPRESS; Database=POSSYSTEM; Trusted_Connection=True";
+        //    builder.UseSqlServer(SqlConnectionString);
+        //    base.OnConfiguring(builder);
+        //}
     }
 }

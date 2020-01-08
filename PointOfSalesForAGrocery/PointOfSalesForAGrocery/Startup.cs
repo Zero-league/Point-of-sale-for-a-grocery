@@ -32,8 +32,8 @@ namespace PointOfSalesForAGrocery
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            string constring = Configuration["ConnectionString:Constring"];
-            services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer("Data Source=.\\MSSQL;Initial Catalog=POSSYSTEM;Integrated Security=True"));
+            string Constring = Configuration["ConnectionString:Constring"];
+            services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(Constring));
 
             services.AddControllers().AddNewtonsoftJson();
             services.AddDefaultIdentity<IdentityUser>()
@@ -43,6 +43,7 @@ namespace PointOfSalesForAGrocery
             services.AddScoped<IInventoryRepository, InventoryRepo>();
             services.AddScoped<IExpensesRepository, ExpensesRepo>();
             services.AddScoped<IBillRepository, BillRepo>();
+            services.AddScoped<ISaleRepository, SaleRepo>();
 
             services.AddAutoMapper(typeof(AuttoMapping));
             services.AddMvc().AddNewtonsoftJson();

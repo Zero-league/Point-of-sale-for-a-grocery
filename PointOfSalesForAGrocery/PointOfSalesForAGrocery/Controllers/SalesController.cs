@@ -52,39 +52,47 @@ namespace PointOfSalesForAGrocery.Controllers
             {
                 return BadRequest();
             }
-            
+
             try
             {
-                var update =  _saleRepository.UpdateSale(id, sale);
-                if(update != null)
+                var update = _saleRepository.UpdateSale(id, sale);
+                if (update != null)
                 {
                     return Ok();
                 }
             }
             catch (Exception)
             {
-                
-                    throw;
-                
+
+                throw;
+
             }
 
             return NoContent();
         }
 
         [HttpPost]
-        public IActionResult AddSale(List<Sale> sale)
+        public IActionResult AddSale(ICollection<Sale> sale)
         {
-            
-
             if (sale != null)
             {
-              _saleRepository.AddSale(sale);
+                //_saleRepository.AddSale(sale);
                 return Ok();
             }
             else
             {
                 return BadRequest();
             }
+
+            //if (sale != null)
+            //{
+            //    _saleRepository.AddSale(sale);
+            //    return Ok();
+            //}
+            //else
+            //{
+            //    return BadRequest();
+            //}
         }
 
         [HttpDelete("{id}")]
@@ -99,6 +107,11 @@ namespace PointOfSalesForAGrocery.Controllers
             return Ok();
         }
 
-      
+        //public IActionResult AddToSales()
+        //{
+
+        //}
+
+
     }
 }

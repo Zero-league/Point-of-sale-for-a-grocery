@@ -16,49 +16,50 @@ namespace PointOfSalesForAGrocery.Repository.Implementation
             this._DbContext = DbContext;
         }
 
-        public Bill AddBill(Bill bill,List<Sale> sale)
+        public int AddBill(Bill bill)
         {
-            float amo = 0;
-            if (sale != null)
-            {
-                foreach (var item in sale)
-                {
-                    amo += item.RetailPrice;
+            //float amo = 0;
+            //if (sale != null)
+            //{
+            //    foreach (var item in sale)
+            //    {
+            //        amo += item.RetailPrice;
 
-                }
-            }
+            //    }
+            //}
             if (bill != null)
             {
-                if (bill.Discount != 0)
-                {
+                //if (bill.Discount != 0)
+                //{
                     Bill bill1 = new Bill();
-                    bill1.NetAmount = amo;
-                    bill1.GroceAmount = amo * ((100 - bill.Discount) / 100);
+                    bill1.NetAmount = bill.NetAmount;
+                    bill1.Discount = bill.Discount;
+                    bill1.GroceAmount = bill.GroceAmount;
                     bill1.DateTime = bill.DateTime;
                     bill1.Discount = bill.Discount;
                     bill1.SalesPerson = bill.SalesPerson;
 
                     _DbContext.Bill.Add(bill1);
                     _DbContext.SaveChanges();
-                }
-                else
-                {
-                    Bill bill1 = new Bill();
-                    bill1.NetAmount = amo;
-                    bill1.GroceAmount = amo;
-                    bill1.DateTime = bill.DateTime;
-                    bill1.Discount = bill.Discount;
-                    bill1.SalesPerson = bill.SalesPerson;
+                //}
+                //else
+                //{
+                //    Bill bill1 = new Bill();
+                //    bill1.NetAmount = amo;
+                //    bill1.GroceAmount = amo;
+                //    bill1.DateTime = bill.DateTime;
+                //    bill1.Discount = bill.Discount;
+                //    bill1.SalesPerson = bill.SalesPerson;
 
-                    _DbContext.Bill.Add(bill);
-                    _DbContext.SaveChanges();
-                }
+                //    _DbContext.Bill.Add(bill);
+                //    _DbContext.SaveChanges();
+                //}
 
 
             }
             
-            var newbill = GetBillById(bill.Id);
-            return newbill;
+            //var newbill = GetBillById(bill.Id);
+            return bill.Id;
         }
 
         public Bill DeleteBill(int id)

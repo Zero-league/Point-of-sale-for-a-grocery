@@ -12,7 +12,7 @@ namespace PointOfSalesForAGrocery.Repository
         IEnumerable<Sale> GetSales();
         Sale GetSaleById(int id);
         Sale UpdateSale(int id, Sale sale);
-        void AddSale(List<Sale> sale);
+        bool AddSale(Sale sale);
         Sale DeleteSale(int id);
     }
 }
